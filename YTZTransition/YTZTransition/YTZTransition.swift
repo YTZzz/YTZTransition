@@ -10,6 +10,10 @@ import UIKit
 
 protocol YTZTransitionDelegate: class {
     func placeHolderView() -> UIView
+//    func zoomViewForFromVC() -> UIView
+//    func zoomViewForToVC() -> UIView
+//    func zoomViewFrameForFromVC() -> CGRect
+//    func zoomViewFrameForToVC() -> CGRect
 }
 
 extension UIViewController {

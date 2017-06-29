@@ -77,7 +77,7 @@ extension YTZTransitionController: UIViewControllerTransitioningDelegate {
 }
 extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.2
+        return isDismissal ? 0.2 : 0.3
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -93,22 +93,23 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
         let zoomImageView = UIImageView(image: getImage(from: zoomView))
         zoomImageView.frame = fromVC.view.convert(zoomView.frame, to: fromVC.view)
         zoomImageView.contentMode = .scaleAspectFit
-        zoomImageView.backgroundColor = toVC.view.backgroundColor
+        zoomImageView.backgroundColor = zoomView.backgroundColor
         containerView.addSubview(zoomImageView)
 
         if isDismissal {
+            zoomImageView.backgroundColor = fromVC.view.backgroundColor
+            zoomView.isHidden = true
+            containerView.insertSubview(toVC.view, belowSubview: fromVC.view)
+            fromVC.view.removeFromSuperview()
+
             var zoomFinalFrame = CGRect(x: fromVC.view.bounds.minX, y: fromVC.view.bounds.minY, width: 0, height: 0)
             if let delegate = self.delegate {
                 let placeHolderView = delegate.placeHolderView()
                 zoomFinalFrame = toVC.view.convert(placeHolderView.frame, to: toVC.view)
             }
-            zoomImageView.backgroundColor = fromVC.view.backgroundColor
-            zoomImageView.frame = fromVC.view.bounds
-            containerView.insertSubview(toVC.view, belowSubview: fromVC.view)
-            fromVC.view.removeFromSuperview()
             UIView.animate(withDuration: duration, animations: {
-                zoomImageView.backgroundColor = .clear
                 zoomImageView.frame = zoomFinalFrame
+                fromVC.view.alpha = 0
             }, completion: {
                 finished in
                 if finished {
@@ -116,14 +117,32 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
                 }
             })
         } else {
-            UIView.animate(withDuration: duration, animations: {
-                zoomImageView.frame = UIScreen.main.bounds
+            zoomImageView.backgroundColor = toVC.view.backgroundColor
+            let maxZoomScale: CGFloat = 1.1
+            let originZoomScale = (1 - maxZoomScale) / 2
+            let finialSize = toVC.view.bounds.size
+            let maxZoomFrame = CGRect(x: finialSize.width * originZoomScale,
+                                      y: finialSize.height * originZoomScale,
+                                      width: finialSize.width * maxZoomScale,
+                                      height: finialSize.height * maxZoomScale)
+            let firstDurationRatio = 2.0 / 3.0
+            zoomImageView.backgroundColor = .clear
+            UIView.animate(withDuration: duration * firstDurationRatio, animations: {
+                zoomImageView.frame = maxZoomFrame
+                zoomImageView.backgroundColor = toVC.view.backgroundColor
             }, completion: {
                 finished in
                 if finished {
-                    containerView.addSubview(toVC.view)
-                    zoomImageView.removeFromSuperview()
-                    transitionContext.completeTransition(true)
+                    UIView.animate(withDuration: duration * (1 - firstDurationRatio), animations: {
+                        zoomImageView.frame = UIScreen.main.bounds
+                    }, completion: {
+                        finished in
+                        if finished {
+                            containerView.addSubview(toVC.view)
+                            zoomImageView.removeFromSuperview()
+                            transitionContext.completeTransition(true)
+                        }
+                    })
                 }
             })
         }

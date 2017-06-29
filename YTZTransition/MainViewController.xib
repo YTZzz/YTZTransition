@@ -23,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image.png" translatesAutoresizingMaskIntoConstraints="NO" id="tr5-fR-gZu">
-                    <rect key="frame" x="87.5" y="233.5" width="200" height="200"/>
+                    <rect key="frame" x="17.5" y="233.5" width="200" height="200"/>
                     <gestureRecognizers/>
                     <constraints>
                         <constraint firstAttribute="width" constant="200" id="EhW-CT-Jfz"/>
@@ -34,7 +34,7 @@
                     </connections>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MXJ-Id-2b6">
-                    <rect key="frame" x="67" y="75.5" width="240" height="128"/>
+                    <rect key="frame" x="127.5" y="75.5" width="240" height="128"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dlh-gQ-pKp">
                             <rect key="frame" x="98" y="60" width="45" height="52"/>
@@ -65,10 +65,10 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="MXJ-Id-2b6" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="QDh-1s-iwg"/>
+                <constraint firstItem="MXJ-Id-2b6" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" constant="60" id="QDh-1s-iwg"/>
                 <constraint firstItem="tr5-fR-gZu" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="cP0-bA-jZF"/>
                 <constraint firstItem="tr5-fR-gZu" firstAttribute="top" secondItem="MXJ-Id-2b6" secondAttribute="bottom" constant="30" id="hk5-E0-a6p"/>
-                <constraint firstItem="tr5-fR-gZu" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="mWQ-Jn-62H"/>
+                <constraint firstItem="tr5-fR-gZu" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" constant="-70" id="mWQ-Jn-62H"/>
             </constraints>
             <point key="canvasLocation" x="35.5" y="54.5"/>
         </view>
