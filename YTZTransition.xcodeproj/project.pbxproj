@@ -1,0 +1,451 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		67E684151F052AB400897B31 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684131F052AB400897B31 /* MainViewController.swift */; };
+		67E684161F052AB400897B31 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67E684141F052AB400897B31 /* MainViewController.xib */; };
+		67E684191F052AC500897B31 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684171F052AC500897B31 /* DetailViewController.swift */; };
+		67E6841A1F052AC500897B31 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67E684181F052AC500897B31 /* DetailViewController.xib */; };
+		67E6841C1F052B1700897B31 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = 67E6841B1F052B1700897B31 /* image.png */; };
+		67E684221F05328400897B31 /* YTZTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684211F05328400897B31 /* YTZTransition.swift */; };
+		67E684241F05361F00897B31 /* YTZTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684231F05361F00897B31 /* YTZTransitionController.swift */; };
+		67FFCF421F052A330091D322 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FFCF411F052A330091D322 /* AppDelegate.swift */; };
+		67FFCF491F052A330091D322 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67FFCF481F052A330091D322 /* Assets.xcassets */; };
+		67FFCF4C1F052A330091D322 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67FFCF4A1F052A330091D322 /* LaunchScreen.storyboard */; };
+		67FFCF571F052A330091D322 /* YTZTransitionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FFCF561F052A330091D322 /* YTZTransitionTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		67FFCF531F052A330091D322 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67FFCF361F052A330091D322 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67FFCF3D1F052A330091D322;
+			remoteInfo = YTZTransition;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		67E684131F052AB400897B31 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		67E684141F052AB400897B31 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
+		67E684171F052AC500897B31 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		67E684181F052AC500897B31 /* DetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailViewController.xib; sourceTree = "<group>"; };
+		67E6841B1F052B1700897B31 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
+		67E684211F05328400897B31 /* YTZTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZTransition.swift; sourceTree = "<group>"; };
+		67E684231F05361F00897B31 /* YTZTransitionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZTransitionController.swift; sourceTree = "<group>"; };
+		67FFCF3E1F052A330091D322 /* YTZTransition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YTZTransition.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		67FFCF411F052A330091D322 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		67FFCF481F052A330091D322 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		67FFCF4B1F052A330091D322 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		67FFCF4D1F052A330091D322 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		67FFCF521F052A330091D322 /* YTZTransitionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YTZTransitionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		67FFCF561F052A330091D322 /* YTZTransitionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YTZTransitionTests.swift; sourceTree = "<group>"; };
+		67FFCF581F052A330091D322 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		67FFCF3B1F052A330091D322 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67FFCF4F1F052A330091D322 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		67E684121F052A9900897B31 /* YTZTransition */ = {
+			isa = PBXGroup;
+			children = (
+				67E684211F05328400897B31 /* YTZTransition.swift */,
+				67E684231F05361F00897B31 /* YTZTransitionController.swift */,
+			);
+			path = YTZTransition;
+			sourceTree = "<group>";
+		};
+		67FFCF351F052A330091D322 = {
+			isa = PBXGroup;
+			children = (
+				67FFCF401F052A330091D322 /* YTZTransition */,
+				67FFCF551F052A330091D322 /* YTZTransitionTests */,
+				67FFCF3F1F052A330091D322 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		67FFCF3F1F052A330091D322 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				67FFCF3E1F052A330091D322 /* YTZTransition.app */,
+				67FFCF521F052A330091D322 /* YTZTransitionTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		67FFCF401F052A330091D322 /* YTZTransition */ = {
+			isa = PBXGroup;
+			children = (
+				67E684121F052A9900897B31 /* YTZTransition */,
+				67FFCF411F052A330091D322 /* AppDelegate.swift */,
+				67E684131F052AB400897B31 /* MainViewController.swift */,
+				67E684141F052AB400897B31 /* MainViewController.xib */,
+				67E684171F052AC500897B31 /* DetailViewController.swift */,
+				67E684181F052AC500897B31 /* DetailViewController.xib */,
+				67E6841B1F052B1700897B31 /* image.png */,
+				67FFCF481F052A330091D322 /* Assets.xcassets */,
+				67FFCF4A1F052A330091D322 /* LaunchScreen.storyboard */,
+				67FFCF4D1F052A330091D322 /* Info.plist */,
+			);
+			path = YTZTransition;
+			sourceTree = "<group>";
+		};
+		67FFCF551F052A330091D322 /* YTZTransitionTests */ = {
+			isa = PBXGroup;
+			children = (
+				67FFCF561F052A330091D322 /* YTZTransitionTests.swift */,
+				67FFCF581F052A330091D322 /* Info.plist */,
+			);
+			path = YTZTransitionTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		67FFCF3D1F052A330091D322 /* YTZTransition */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67FFCF5B1F052A330091D322 /* Build configuration list for PBXNativeTarget "YTZTransition" */;
+			buildPhases = (
+				67FFCF3A1F052A330091D322 /* Sources */,
+				67FFCF3B1F052A330091D322 /* Frameworks */,
+				67FFCF3C1F052A330091D322 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YTZTransition;
+			productName = YTZTransition;
+			productReference = 67FFCF3E1F052A330091D322 /* YTZTransition.app */;
+			productType = "com.apple.product-type.application";
+		};
+		67FFCF511F052A330091D322 /* YTZTransitionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67FFCF5E1F052A330091D322 /* Build configuration list for PBXNativeTarget "YTZTransitionTests" */;
+			buildPhases = (
+				67FFCF4E1F052A330091D322 /* Sources */,
+				67FFCF4F1F052A330091D322 /* Frameworks */,
+				67FFCF501F052A330091D322 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				67FFCF541F052A330091D322 /* PBXTargetDependency */,
+			);
+			name = YTZTransitionTests;
+			productName = YTZTransitionTests;
+			productReference = 67FFCF521F052A330091D322 /* YTZTransitionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		67FFCF361F052A330091D322 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Taozhu Ye";
+				TargetAttributes = {
+					67FFCF3D1F052A330091D322 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = H3NT69D424;
+						ProvisioningStyle = Automatic;
+					};
+					67FFCF511F052A330091D322 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = H3NT69D424;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 67FFCF3D1F052A330091D322;
+					};
+				};
+			};
+			buildConfigurationList = 67FFCF391F052A330091D322 /* Build configuration list for PBXProject "YTZTransition" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 67FFCF351F052A330091D322;
+			productRefGroup = 67FFCF3F1F052A330091D322 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				67FFCF3D1F052A330091D322 /* YTZTransition */,
+				67FFCF511F052A330091D322 /* YTZTransitionTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		67FFCF3C1F052A330091D322 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67FFCF4C1F052A330091D322 /* LaunchScreen.storyboard in Resources */,
+				67E684161F052AB400897B31 /* MainViewController.xib in Resources */,
+				67FFCF491F052A330091D322 /* Assets.xcassets in Resources */,
+				67E6841A1F052AC500897B31 /* DetailViewController.xib in Resources */,
+				67E6841C1F052B1700897B31 /* image.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67FFCF501F052A330091D322 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		67FFCF3A1F052A330091D322 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67E684191F052AC500897B31 /* DetailViewController.swift in Sources */,
+				67E684221F05328400897B31 /* YTZTransition.swift in Sources */,
+				67FFCF421F052A330091D322 /* AppDelegate.swift in Sources */,
+				67E684151F052AB400897B31 /* MainViewController.swift in Sources */,
+				67E684241F05361F00897B31 /* YTZTransitionController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67FFCF4E1F052A330091D322 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67FFCF571F052A330091D322 /* YTZTransitionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		67FFCF541F052A330091D322 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 67FFCF3D1F052A330091D322 /* YTZTransition */;
+			targetProxy = 67FFCF531F052A330091D322 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		67FFCF4A1F052A330091D322 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				67FFCF4B1F052A330091D322 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		67FFCF591F052A330091D322 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		67FFCF5A1F052A330091D322 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		67FFCF5C1F052A330091D322 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = H3NT69D424;
+				INFOPLIST_FILE = YTZTransition/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.TaozhuYe.YTZTransition;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		67FFCF5D1F052A330091D322 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = H3NT69D424;
+				INFOPLIST_FILE = YTZTransition/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.TaozhuYe.YTZTransition;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		67FFCF5F1F052A330091D322 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = H3NT69D424;
+				INFOPLIST_FILE = YTZTransitionTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.TaozhuYe.YTZTransitionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YTZTransition.app/YTZTransition";
+			};
+			name = Debug;
+		};
+		67FFCF601F052A330091D322 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = H3NT69D424;
+				INFOPLIST_FILE = YTZTransitionTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.TaozhuYe.YTZTransitionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YTZTransition.app/YTZTransition";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		67FFCF391F052A330091D322 /* Build configuration list for PBXProject "YTZTransition" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67FFCF591F052A330091D322 /* Debug */,
+				67FFCF5A1F052A330091D322 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		67FFCF5B1F052A330091D322 /* Build configuration list for PBXNativeTarget "YTZTransition" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67FFCF5C1F052A330091D322 /* Debug */,
+				67FFCF5D1F052A330091D322 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		67FFCF5E1F052A330091D322 /* Build configuration list for PBXNativeTarget "YTZTransitionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67FFCF5F1F052A330091D322 /* Debug */,
+				67FFCF601F052A330091D322 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 67FFCF361F052A330091D322 /* Project object */;
+}
