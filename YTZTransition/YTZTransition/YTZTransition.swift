@@ -13,6 +13,7 @@ extension UIViewController {
         
         let transitionController = YTZTransitionController.shared
         transitionController.isDismissal = false
+        transitionController.frontVC = viewController
         transitionController.frontDelegate = frontDelegate
         transitionController.backgroundDelegate = backgroundDelegate
 
@@ -28,11 +29,10 @@ extension UIViewController {
         })
     }
     
-    func ytz_dismiss(frontTransitionView: UIView) {
+    func ytz_dismiss() {
         
         let transitionController = YTZTransitionController.shared
         transitionController.isDismissal = true
-        transitionController.frontTransitionView = frontTransitionView
 
         let originalPresentationStyle = modalPresentationStyle
         let originalTransitioningDelegate = transitioningDelegate

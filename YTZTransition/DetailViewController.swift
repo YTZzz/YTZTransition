@@ -16,6 +16,7 @@ class DetailViewController: UIViewController, YTZTransitionFrontDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.image = image
+        ytz_addInteractionDismissPanGesture()
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,7 +39,7 @@ class DetailViewController: UIViewController, YTZTransitionFrontDelegate {
     
     @IBAction func touchCloseButton(_ sender: UIButton) {
 //        dismiss(animated: true, completion: nil)
-        ytz_dismiss(frontTransitionView: imageView)
+        ytz_dismiss()
     }
     
     func transitionViewForFrontVC() -> UIView {

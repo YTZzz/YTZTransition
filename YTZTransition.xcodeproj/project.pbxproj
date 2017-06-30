@@ -15,6 +15,7 @@
 		67E684241F05361F00897B31 /* YTZTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684231F05361F00897B31 /* YTZTransitionController.swift */; };
 		67E6842F1F068E3E00897B31 /* image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 67E6842D1F068E3E00897B31 /* image.jpg */; };
 		67E684301F068E3E00897B31 /* image2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 67E6842E1F068E3E00897B31 /* image2.jpg */; };
+		67E684321F06B28600897B31 /* YTZPercentDrivenInteractiveController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684311F06B28600897B31 /* YTZPercentDrivenInteractiveController.swift */; };
 		67FFCF421F052A330091D322 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FFCF411F052A330091D322 /* AppDelegate.swift */; };
 		67FFCF491F052A330091D322 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67FFCF481F052A330091D322 /* Assets.xcassets */; };
 		67FFCF4C1F052A330091D322 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67FFCF4A1F052A330091D322 /* LaunchScreen.storyboard */; };
@@ -40,6 +41,7 @@
 		67E684231F05361F00897B31 /* YTZTransitionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZTransitionController.swift; sourceTree = "<group>"; };
 		67E6842D1F068E3E00897B31 /* image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image.jpg; sourceTree = "<group>"; };
 		67E6842E1F068E3E00897B31 /* image2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image2.jpg; sourceTree = "<group>"; };
+		67E684311F06B28600897B31 /* YTZPercentDrivenInteractiveController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZPercentDrivenInteractiveController.swift; sourceTree = "<group>"; };
 		67FFCF3E1F052A330091D322 /* YTZTransition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YTZTransition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67FFCF411F052A330091D322 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		67FFCF481F052A330091D322 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 			children = (
 				67E684211F05328400897B31 /* YTZTransition.swift */,
 				67E684231F05361F00897B31 /* YTZTransitionController.swift */,
+				67E684311F06B28600897B31 /* YTZPercentDrivenInteractiveController.swift */,
 			);
 			path = YTZTransition;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 			files = (
 				67E684191F052AC500897B31 /* DetailViewController.swift in Sources */,
 				67E684221F05328400897B31 /* YTZTransition.swift in Sources */,
+				67E684321F06B28600897B31 /* YTZPercentDrivenInteractiveController.swift in Sources */,
 				67FFCF421F052A330091D322 /* AppDelegate.swift in Sources */,
 				67E684151F052AB400897B31 /* MainViewController.swift in Sources */,
 				67E684241F05361F00897B31 /* YTZTransitionController.swift in Sources */,
