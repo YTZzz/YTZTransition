@@ -22,7 +22,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image.png" translatesAutoresizingMaskIntoConstraints="NO" id="tr5-fR-gZu">
+                <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="tr5-fR-gZu">
                     <rect key="frame" x="0.0" y="292" width="83" height="83"/>
                     <gestureRecognizers/>
                     <constraints>
@@ -33,7 +33,7 @@
                         <outletCollection property="gestureRecognizers" destination="dDM-hf-gkO" appends="YES" id="bur-PO-Jtj"/>
                     </connections>
                 </imageView>
-                <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image2.png" translatesAutoresizingMaskIntoConstraints="NO" id="Qbk-t3-XuP">
+                <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image2.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="Qbk-t3-XuP">
                     <rect key="frame" x="292" y="50" width="83" height="83"/>
                     <gestureRecognizers/>
                     <constraints>
@@ -66,7 +66,7 @@
         </tapGestureRecognizer>
     </objects>
     <resources>
-        <image name="image.png" width="160" height="160"/>
-        <image name="image2.png" width="209" height="216"/>
+        <image name="image.jpg" width="750" height="344"/>
+        <image name="image2.jpg" width="298" height="1334"/>
     </resources>
 </document>

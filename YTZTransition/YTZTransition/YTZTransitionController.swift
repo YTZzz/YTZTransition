@@ -221,21 +221,21 @@ extension YTZTransitionController {
     
     func getProjectionFrame(smallFrame: CGRect, largeFrame: CGRect, radioFinalDividLarge: CGFloat) -> CGRect {
 
-        var smallFillFrame = CGRect.zero // change small size to aspect fill large size
-        let largeWDividH = largeFrame.width / largeFrame.height
-        let smallWDividH = smallFrame.width / smallFrame.height
-        if largeWDividH >= smallWDividH {
-            let width = smallFrame.height * largeWDividH
-            smallFillFrame = CGRect(x: smallFrame.midX - width / 2, y: smallFrame.minY, width: width, height: smallFrame.height)
-        } else {
-            let height = smallFrame.width / largeWDividH
-            smallFillFrame = CGRect(x: smallFrame.minX, y: smallFrame.midY - height / 2, width: smallFrame.width, height: height)
-        }
+//        var smallFillFrame = CGRect.zero // change small size to aspect fill large size
+//        let largeWDividH = largeFrame.width / largeFrame.height
+//        let smallWDividH = smallFrame.width / smallFrame.height
+//        if largeWDividH >= smallWDividH {
+//            let width = smallFrame.height * largeWDividH
+//            smallFillFrame = CGRect(x: smallFrame.midX - width / 2, y: smallFrame.minY, width: width, height: smallFrame.height)
+//        } else {
+//            let height = smallFrame.width / largeWDividH
+//            smallFillFrame = CGRect(x: smallFrame.minX, y: smallFrame.midY - height / 2, width: smallFrame.width, height: height)
+//        }
         
         let finalSize = CGSize(width: largeFrame.width * radioFinalDividLarge, height: largeFrame.height * radioFinalDividLarge)
-        let radio = (finalSize.width - smallFillFrame.width) / (largeFrame.width - smallFillFrame.width)
-        let finalFrame = CGRect(x: (largeFrame.minX - smallFillFrame.minX) * radio + smallFillFrame.minX,
-                                y: (largeFrame.minY - smallFillFrame.minY) * radio + smallFillFrame.minY,
+        let radio = (finalSize.width - smallFrame.width) / (largeFrame.width - smallFrame.width)
+        let finalFrame = CGRect(x: (largeFrame.minX - smallFrame.minX) * radio + smallFrame.minX,
+                                y: (largeFrame.minY - smallFrame.minY) * radio + smallFrame.minY,
                                 width: finalSize.width,
                                 height:finalSize.height)
         return finalFrame
