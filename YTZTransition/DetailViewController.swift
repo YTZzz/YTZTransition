@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, YTZTransitionFrontDelegate {
 
     @IBOutlet weak var imageView: UIImageView!
     var image: UIImage?
@@ -38,6 +38,10 @@ class DetailViewController: UIViewController {
     
     @IBAction func touchCloseButton(_ sender: UIButton) {
 //        dismiss(animated: true, completion: nil)
-        ytz_dismiss(zoomView: imageView)
+        ytz_dismiss(frontTransitionView: imageView)
+    }
+    
+    func transitionViewForFrontVC() -> UIView {
+        return imageView
     }
 }

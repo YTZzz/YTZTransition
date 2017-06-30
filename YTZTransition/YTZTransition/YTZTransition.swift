@@ -8,22 +8,14 @@
 
 import UIKit
 
-protocol YTZTransitionDelegate: class {
-    func placeHolderView() -> UIView
-//    func zoomViewForFromVC() -> UIView
-//    func zoomViewForToVC() -> UIView
-//    func zoomViewFrameForFromVC() -> CGRect
-//    func zoomViewFrameForToVC() -> CGRect
-}
-
 extension UIViewController {
-    func ytz_present(_ viewController: UIViewController, zoomView: UIView, delegate: YTZTransitionDelegate?) {
+    func ytz_present(_ viewController: UIViewController, frontDelegate: YTZTransitionFrontDelegate?, backgroundDelegate: YTZTransitionBackgroundDelegate?) {
         
         let transitionController = YTZTransitionController.shared
         transitionController.isDismissal = false
-        transitionController.zoomView = zoomView
-        transitionController.delegate = delegate
-        
+        transitionController.frontDelegate = frontDelegate
+        transitionController.backgroundDelegate = backgroundDelegate
+
         let originalPresentationStyle = viewController.modalPresentationStyle
         let originalTransitioningDelegate = viewController.transitioningDelegate
         
@@ -36,11 +28,11 @@ extension UIViewController {
         })
     }
     
-    func ytz_dismiss(zoomView: UIView) {
+    func ytz_dismiss(frontTransitionView: UIView) {
         
         let transitionController = YTZTransitionController.shared
         transitionController.isDismissal = true
-        transitionController.zoomView = zoomView
+        transitionController.frontTransitionView = frontTransitionView
 
         let originalPresentationStyle = modalPresentationStyle
         let originalTransitioningDelegate = transitioningDelegate

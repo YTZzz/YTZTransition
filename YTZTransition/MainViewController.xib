@@ -12,8 +12,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainViewController" customModule="YTZTransition" customModuleProvider="target">
             <connections>
-                <outlet property="colorfulView" destination="MXJ-Id-2b6" id="omv-fc-oKl"/>
                 <outlet property="imageView" destination="tr5-fR-gZu" id="4g2-sO-IME"/>
+                <outlet property="secondImageView" destination="Qbk-t3-XuP" id="Ztu-wv-Py1"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -23,52 +23,34 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image.png" translatesAutoresizingMaskIntoConstraints="NO" id="tr5-fR-gZu">
-                    <rect key="frame" x="17.5" y="233.5" width="200" height="200"/>
+                    <rect key="frame" x="0.0" y="292" width="83" height="83"/>
                     <gestureRecognizers/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="200" id="EhW-CT-Jfz"/>
+                        <constraint firstAttribute="width" constant="83" id="EhW-CT-Jfz"/>
                         <constraint firstAttribute="width" secondItem="tr5-fR-gZu" secondAttribute="height" id="mh1-B7-hx8"/>
                     </constraints>
                     <connections>
                         <outletCollection property="gestureRecognizers" destination="dDM-hf-gkO" appends="YES" id="bur-PO-Jtj"/>
                     </connections>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MXJ-Id-2b6">
-                    <rect key="frame" x="127.5" y="75.5" width="240" height="128"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dlh-gQ-pKp">
-                            <rect key="frame" x="98" y="60" width="45" height="52"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="0.7556453339041096" colorSpace="calibratedRGB"/>
-                        </view>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Asf-wp-C1z">
-                            <rect key="frame" x="68" y="7.5" width="150" height="66"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.51220703125" green="0.82619900173611116" blue="0.21492513020833334" alpha="0.65833690068493156" colorSpace="calibratedRGB"/>
-                        </view>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lkC-IG-j0h">
-                            <rect key="frame" x="19" y="17.5" width="100" height="102"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="1" green="0.0" blue="1" alpha="0.67610231164383561" colorSpace="calibratedRGB"/>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" red="0.35077582465277779" green="0.3435329861111111" blue="0.3095703125" alpha="1" colorSpace="calibratedRGB"/>
+                <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image2.png" translatesAutoresizingMaskIntoConstraints="NO" id="Qbk-t3-XuP">
+                    <rect key="frame" x="292" y="50" width="83" height="83"/>
                     <gestureRecognizers/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="240" id="UiI-4w-Vvz"/>
-                        <constraint firstAttribute="height" constant="128" id="oVO-JG-UxD"/>
+                        <constraint firstAttribute="width" constant="83" id="GfN-Yi-9jz"/>
+                        <constraint firstAttribute="width" secondItem="Qbk-t3-XuP" secondAttribute="height" id="tUR-RV-uPp"/>
                     </constraints>
                     <connections>
-                        <outletCollection property="gestureRecognizers" destination="oCz-hT-tJQ" appends="YES" id="EnL-1a-2FO"/>
+                        <outletCollection property="gestureRecognizers" destination="WP7-23-jAK" appends="YES" id="Nlu-v6-DPh"/>
                     </connections>
-                </view>
+                </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="MXJ-Id-2b6" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" constant="60" id="QDh-1s-iwg"/>
+                <constraint firstAttribute="trailing" secondItem="Qbk-t3-XuP" secondAttribute="trailing" id="GgB-3I-bdL"/>
                 <constraint firstItem="tr5-fR-gZu" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="cP0-bA-jZF"/>
-                <constraint firstItem="tr5-fR-gZu" firstAttribute="top" secondItem="MXJ-Id-2b6" secondAttribute="bottom" constant="30" id="hk5-E0-a6p"/>
-                <constraint firstItem="tr5-fR-gZu" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" constant="-70" id="mWQ-Jn-62H"/>
+                <constraint firstItem="tr5-fR-gZu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="nMs-0c-Uwr"/>
+                <constraint firstItem="Qbk-t3-XuP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="50" id="npq-B6-k39"/>
             </constraints>
             <point key="canvasLocation" x="35.5" y="54.5"/>
         </view>
@@ -77,13 +59,14 @@
                 <action selector="tapImageView:" destination="-1" id="odw-se-QdT"/>
             </connections>
         </tapGestureRecognizer>
-        <tapGestureRecognizer id="oCz-hT-tJQ">
+        <tapGestureRecognizer id="WP7-23-jAK">
             <connections>
-                <action selector="tapView:" destination="-1" id="Bo2-qe-O3h"/>
+                <action selector="tapSecondImageView:" destination="-1" id="93N-pe-fwC"/>
             </connections>
         </tapGestureRecognizer>
     </objects>
     <resources>
         <image name="image.png" width="160" height="160"/>
+        <image name="image2.png" width="209" height="216"/>
     </resources>
 </document>

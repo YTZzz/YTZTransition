@@ -8,10 +8,12 @@
 
 import UIKit
 
-class MainViewController: UIViewController, YTZTransitionDelegate {
+class MainViewController: UIViewController, YTZTransitionBackgroundDelegate {
 
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var colorfulView: UIView!
+    @IBOutlet weak var secondImageView: UIImageView!
+    
+    var selectedView: UIView!
     
     init() {
         super.init(nibName: "MainViewController", bundle: nil)
@@ -29,17 +31,19 @@ class MainViewController: UIViewController, YTZTransitionDelegate {
         super.didReceiveMemoryWarning()
     }
     
-    @IBAction func tapView(_ sender: UITapGestureRecognizer) {
-        let detailVC = DetailViewController(image: imageView.image!)
-        ytz_present(detailVC, zoomView: colorfulView, delegate: self)
-    }
     @IBAction func tapImageView(_ sender: UITapGestureRecognizer) {
         let detailVC = DetailViewController(image: imageView.image!)
-        ytz_present(detailVC, zoomView: imageView, delegate: self)
+        selectedView = imageView
+        ytz_present(detailVC, frontDelegate: detailVC, backgroundDelegate: self)
     }
     
-    func placeHolderView() -> UIView {
-        
-        return imageView
+    @IBAction func tapSecondImageView(_ sender: Any) {
+        let detailVC = DetailViewController(image: secondImageView.image!)
+        selectedView = secondImageView
+        ytz_present(detailVC, frontDelegate: detailVC, backgroundDelegate: self)
+    }
+    
+    func transitionViewForBackgroundVC() -> UIView {
+        return selectedView
     }
 }

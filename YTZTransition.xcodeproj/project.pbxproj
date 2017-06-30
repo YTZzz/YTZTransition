@@ -11,9 +11,10 @@
 		67E684161F052AB400897B31 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67E684141F052AB400897B31 /* MainViewController.xib */; };
 		67E684191F052AC500897B31 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684171F052AC500897B31 /* DetailViewController.swift */; };
 		67E6841A1F052AC500897B31 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 67E684181F052AC500897B31 /* DetailViewController.xib */; };
-		67E6841C1F052B1700897B31 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = 67E6841B1F052B1700897B31 /* image.png */; };
 		67E684221F05328400897B31 /* YTZTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684211F05328400897B31 /* YTZTransition.swift */; };
 		67E684241F05361F00897B31 /* YTZTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684231F05361F00897B31 /* YTZTransitionController.swift */; };
+		67E6842A1F06897300897B31 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = 67E684291F06897300897B31 /* image.png */; };
+		67E6842C1F06898B00897B31 /* image2.png in Resources */ = {isa = PBXBuildFile; fileRef = 67E6842B1F06898B00897B31 /* image2.png */; };
 		67FFCF421F052A330091D322 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FFCF411F052A330091D322 /* AppDelegate.swift */; };
 		67FFCF491F052A330091D322 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67FFCF481F052A330091D322 /* Assets.xcassets */; };
 		67FFCF4C1F052A330091D322 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67FFCF4A1F052A330091D322 /* LaunchScreen.storyboard */; };
@@ -35,9 +36,10 @@
 		67E684141F052AB400897B31 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		67E684171F052AC500897B31 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		67E684181F052AC500897B31 /* DetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailViewController.xib; sourceTree = "<group>"; };
-		67E6841B1F052B1700897B31 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		67E684211F05328400897B31 /* YTZTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZTransition.swift; sourceTree = "<group>"; };
 		67E684231F05361F00897B31 /* YTZTransitionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZTransitionController.swift; sourceTree = "<group>"; };
+		67E684291F06897300897B31 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
+		67E6842B1F06898B00897B31 /* image2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image2.png; sourceTree = "<group>"; };
 		67FFCF3E1F052A330091D322 /* YTZTransition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YTZTransition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67FFCF411F052A330091D322 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		67FFCF481F052A330091D322 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -102,7 +104,8 @@
 				67E684141F052AB400897B31 /* MainViewController.xib */,
 				67E684171F052AC500897B31 /* DetailViewController.swift */,
 				67E684181F052AC500897B31 /* DetailViewController.xib */,
-				67E6841B1F052B1700897B31 /* image.png */,
+				67E684291F06897300897B31 /* image.png */,
+				67E6842B1F06898B00897B31 /* image2.png */,
 				67FFCF481F052A330091D322 /* Assets.xcassets */,
 				67FFCF4A1F052A330091D322 /* LaunchScreen.storyboard */,
 				67FFCF4D1F052A330091D322 /* Info.plist */,
@@ -206,9 +209,10 @@
 			files = (
 				67FFCF4C1F052A330091D322 /* LaunchScreen.storyboard in Resources */,
 				67E684161F052AB400897B31 /* MainViewController.xib in Resources */,
+				67E6842C1F06898B00897B31 /* image2.png in Resources */,
 				67FFCF491F052A330091D322 /* Assets.xcassets in Resources */,
 				67E6841A1F052AC500897B31 /* DetailViewController.xib in Resources */,
-				67E6841C1F052B1700897B31 /* image.png in Resources */,
+				67E6842A1F06897300897B31 /* image.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
