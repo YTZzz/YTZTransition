@@ -148,7 +148,8 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
             let zoomImageView = UIImageView(image: image)
             let zoomFinalFrame = getAsceptFitFrame(image: image, frame: toVC.view.convert(frontTransitionView.frame, to: toVC.view))
             zoomImageView.frame = fromVC.view.convert(backgroundTransitionView.frame, to: fromVC.view)
-            zoomImageView.contentMode = .scaleAspectFit
+            zoomImageView.contentMode = .scaleAspectFill
+            zoomImageView.clipsToBounds = true
             zoomImageView.backgroundColor = backgroundTransitionView.backgroundColor
             containerView.addSubview(zoomImageView)
 
