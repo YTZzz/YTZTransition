@@ -16,7 +16,7 @@ class DetailViewController: UIViewController, YTZTransitionFrontDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.image = image
-        ytz_addInteractionDismissPanGesture()
+        _ = ytz_addInteractionDismissPanGesture(in: view)
     }
 
     override func didReceiveMemoryWarning() {

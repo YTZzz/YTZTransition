@@ -9,6 +9,7 @@
 import UIKit
 
 extension UIViewController {
+    
     func ytz_present(_ viewController: UIViewController, frontDelegate: YTZTransitionFrontDelegate?, backgroundDelegate: YTZTransitionBackgroundDelegate?) {
         
         let transitionController = YTZTransitionController.shared
@@ -47,7 +48,9 @@ extension UIViewController {
         })
     }
     
-    func ytz_addInteractionDismissPanGesture() {
-        view.addGestureRecognizer(YTZTransitionController.shared.dismissPanGestureRecognizer)
+    func ytz_addInteractionDismissPanGesture(in view: UIView) -> UIPanGestureRecognizer {
+        let panGestureRecognizer: UIPanGestureRecognizer = YTZTransitionController.shared.dismissPanGestureRecognizer
+        view.addGestureRecognizer(panGestureRecognizer)
+        return panGestureRecognizer
     }
 }

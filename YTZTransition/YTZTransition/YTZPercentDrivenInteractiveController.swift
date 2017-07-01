@@ -37,7 +37,7 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
         else {
             return
         }
-        UIView.animate(withDuration: leftDuration, delay: 0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut, animations: {
             zoomView.frame = zoomFinalFrame
         }, completion: {
             finished in
@@ -63,7 +63,7 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
         let fromView = transitionContext.view(forKey: .from)
         let toView = transitionContext.view(forKey: .to)
         
-        UIView.animate(withDuration: leftDuration, delay: 0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut, animations: {
             fromView?.alpha = 1
             zoomView.frame = zoomStartFrame
         }, completion: {
@@ -76,6 +76,5 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
                 transitionContext.completeTransition(false)
             }
         })
-
     }
 }

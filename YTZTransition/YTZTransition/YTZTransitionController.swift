@@ -49,6 +49,8 @@ class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
         var progress = (touchPoint.y - startInteractionPoint.y) / UIScreen.main.bounds.height * 2
         if progress < 0 {
             progress = 0
+        } else if progress > 0.9 {
+            progress = 0.9
         }
 
         switch panGestureRecognizer.state {
@@ -177,17 +179,15 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
                 interactiveController.zoomFinalFrame = zoomFinalFrame
 
                 UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: {
-                    fromVC.view.alpha = 0
+                    fromVC.view.alpha = 0.1
                 }, completion: {
                     finished in
                     if finished {
                         let cancelled = transitionContext.transitionWasCancelled
                         if !cancelled {
                             fromVC.view.removeFromSuperview()
-                            backgroundTransitionView.isHidden = false
                         }
                     }
-
                 })
             } else {
                 UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
