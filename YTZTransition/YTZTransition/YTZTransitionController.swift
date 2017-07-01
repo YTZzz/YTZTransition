@@ -33,7 +33,6 @@ class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
     fileprivate var startInteractionPoint = CGPoint.zero
     fileprivate var interactionLastTouchPoint = CGPoint.zero
     fileprivate var zoomImageViewStartInteractionFrame = CGRect.zero
-    fileprivate var zoomImageViewFinishInteractionFrame: CGRect?
     
     // MARK: - Init
     private override init() {
@@ -76,12 +75,11 @@ class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
             interactiveController.update(progress)
             interactionLastTouchPoint = touchPoint
         case .ended:
-//            if progress > 0.15 {
-//                interactiveController.finish()
-//            } else {
-//                interactiveController.cancel()
-//            }
-            interactiveController.finish()
+            if progress > 0.15 && panGestureRecognizer.velocity(in: panGestureRecognizer.view!).y > -5 {
+                interactiveController.finish()
+            } else {
+                interactiveController.cancel()
+            }
             isInteraction = false
         case .cancelled:
             interactiveController.cancel()
@@ -172,20 +170,24 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
 
             if isInteraction {
                 backgroundTransitionView.isHidden = true
+                interactiveController.frontZoomView = frontTransitionView
                 interactiveController.backgroundZoomView = backgroundTransitionView
                 interactiveController.zoomView = zoomImageView
-                interactiveController.finalFrame = zoomFinalFrame
-                zoomImageViewFinishInteractionFrame = zoomFinalFrame
+                interactiveController.zoomStartFrame = zoomImageViewStartInteractionFrame
+                interactiveController.zoomFinalFrame = zoomFinalFrame
+
                 UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: {
                     fromVC.view.alpha = 0
-                    print(fromVC.view.alpha)
                 }, completion: {
                     finished in
                     if finished {
-                        fromVC.view.removeFromSuperview()
-                        backgroundTransitionView.isHidden = false
-                        transitionContext.completeTransition(true)
+                        let cancelled = transitionContext.transitionWasCancelled
+                        if !cancelled {
+                            fromVC.view.removeFromSuperview()
+                            backgroundTransitionView.isHidden = false
+                        }
                     }
+
                 })
             } else {
                 UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
