@@ -24,11 +24,14 @@ class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
     var frontVC: UIViewController?
     var isDismissal = false
     var dismissPanGestureRecognizer: UIPanGestureRecognizer!
-    fileprivate var zoomImageView: UIImageView!
+    fileprivate var zoomImageView: UIImageView?
+    
     fileprivate var isInteraction = false
-    fileprivate var isInteractionFinished = false
     fileprivate var interactiveController: YTZPercentDrivenInteractiveController!
     fileprivate var startInteractionPoint = CGPoint.zero
+    fileprivate var interactionLastTouchPoint = CGPoint.zero
+    fileprivate var zoomImageViewStartInteractionFrame = CGRect.zero
+    fileprivate var zoomImageViewFinishInteractionFrame: CGRect?
     
     private override init() {
         super.init()
@@ -39,27 +42,51 @@ class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
     
     func handleDismissPanGestureRecognizer(_ panGestureRecognizer: UIPanGestureRecognizer) {
         
-        var progress = panGestureRecognizer.location(in: panGestureRecognizer.view!).y - startInteractionPoint.y / UIScreen.main.bounds.width * 2
-        if progress < 0 {
-            progress = 0
-        }
+        var progress: CGFloat = 0
         
         switch panGestureRecognizer.state {
         case .began:
             isInteraction = true
             startInteractionPoint = panGestureRecognizer.location(in: panGestureRecognizer.view!)
+            interactionLastTouchPoint = startInteractionPoint
+            print("startInteractionPoint: ", startInteractionPoint)
             if let vc = frontVC {
                 vc.ytz_dismiss()
             }
         case .changed:
+            let touchPoint = panGestureRecognizer.location(in: panGestureRecognizer.view!)
+            progress = (touchPoint.y - startInteractionPoint.y) / UIScreen.main.bounds.height * 2
+            if progress < 0 {
+                progress = 0
+            }
+
+            let sizeRadio = (1 - progress / 4)
+            guard let zoomImageView = self.zoomImageView else {
+                return
+            }
+            let width  = zoomImageViewStartInteractionFrame.width  * sizeRadio
+            let height = zoomImageViewStartInteractionFrame.height * sizeRadio
+            let x = zoomImageView.frame.minX + touchPoint.x - interactionLastTouchPoint.x + (zoomImageView.frame.width  - width ) / 2
+            let y = zoomImageView.frame.minY + touchPoint.y - interactionLastTouchPoint.y + (zoomImageView.frame.height - height) / 2
+            zoomImageView.frame = CGRect(x: x,
+                                         y: y,
+                                         width: width,
+                                         height: height)
             interactiveController.update(progress)
+            interactionLastTouchPoint = touchPoint
         case .ended:
+            if progress > 0.15 {
+                interactiveController.finish()
+            } else {
+                interactiveController.cancel()
+            }
             isInteraction = false
         case .cancelled:
+            interactiveController.cancel()
             isInteraction = false
         case .failed:
+            interactiveController.cancel()
             isInteraction = false
-            isInteractionFinished = true
         default:
             break
         }
@@ -105,8 +132,7 @@ extension YTZTransitionController: UIViewControllerTransitioningDelegate {
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-//        return isInteraction ? interactiveController : nil
-        return nil
+        return isInteraction ? interactiveController : nil
     }
 }
 
@@ -136,7 +162,11 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
             
             let image = getImage(from: frontTransitionView)
             zoomImageView = UIImageView(image: image)
+            guard let zoomImageView = self.zoomImageView else {
+                return
+            }
             zoomImageView.frame = getAsceptFitFrame(image: image, frame: fromVC.view.convert(frontTransitionView.frame, to: fromVC.view))
+            zoomImageViewStartInteractionFrame = zoomImageView.frame
             zoomImageView.contentMode = .scaleAspectFill
             zoomImageView.clipsToBounds = true
             zoomImageView.backgroundColor = fromVC.view.backgroundColor
@@ -149,17 +179,33 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
             containerView.insertSubview(toVC.view, belowSubview: fromVC.view)
             fromVC.view.backgroundColor = .white
 
-            UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseOut, .preferredFramesPerSecond60], animations: {
-                [weak self] in
-                self?.zoomImageView.frame = zoomFinalFrame
-                fromVC.view.alpha = 0
-            }, completion: {
-                finished in
-                if finished {
-                    fromVC.view.removeFromSuperview()
-                    transitionContext.completeTransition(true)
-                }
-            })
+            if isInteraction {
+                backgroundTransitionView.isHidden = true
+                interactiveController.backgroundZoomView = backgroundTransitionView
+                interactiveController.zoomView = zoomImageView
+                interactiveController.finalFrame = zoomFinalFrame
+                zoomImageViewFinishInteractionFrame = zoomFinalFrame
+                UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: {
+                    fromVC.view.alpha = 0
+                }, completion: {
+                    finished in
+                    if finished {
+                        backgroundTransitionView.isHidden = false
+                        transitionContext.completeTransition(true)
+                    }
+                })
+            } else {
+                UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseOut, .preferredFramesPerSecond60], animations: {
+                    zoomImageView.frame = zoomFinalFrame
+                    fromVC.view.alpha = 0
+                    }, completion: {
+                        finished in
+                        if finished {
+                            fromVC.view.removeFromSuperview()
+                            transitionContext.completeTransition(true)
+                        }
+                })
+            }
 
         } else {
             
@@ -172,6 +218,9 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
             
             let image = getImage(from: backgroundTransitionView)
             zoomImageView = UIImageView(image: image)
+            guard let zoomImageView = self.zoomImageView else {
+                return
+            }
             let zoomFinalFrame = getAsceptFitFrame(image: image, frame: toVC.view.convert(frontTransitionView.frame, to: toVC.view))
             zoomImageView.frame = fromVC.view.convert(backgroundTransitionView.frame, to: fromVC.view)
             zoomImageView.contentMode = .scaleAspectFill
@@ -189,21 +238,18 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
             containerView.insertSubview(toVC.view, belowSubview: zoomImageView)
             
             UIView.animate(withDuration: duration * firstDurationRatio, delay: 0, options: [.curveEaseOut, .preferredFramesPerSecond60], animations: {
-                [weak self] in
-                self?.zoomImageView.frame = maxZoomFrame
+                zoomImageView.frame = maxZoomFrame
                 toVC.view.alpha = 1
                 }, completion: {
                     finished in
                     if finished {
                         UIView.animate(withDuration: duration * (1 - firstDurationRatio), animations: {
-                            [weak self] in
-                            self?.zoomImageView.frame = zoomFinalFrame
-                            }, completion: {
-                                [weak self]
+                            zoomImageView.frame = zoomFinalFrame
+                        }, completion: {
                                 finished in
                                 if finished {
                                     frontTransitionView.isHidden = false
-                                    self?.zoomImageView.removeFromSuperview()
+                                    zoomImageView.removeFromSuperview()
                                     fromVC.view.removeFromSuperview()
                                     transitionContext.completeTransition(true)
                                 }
@@ -214,11 +260,33 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
     }
 }
 
-extension YTZTransitionController: UIViewControllerInteractiveTransitioning {
-    public func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
-        
-    }
-}
+//extension YTZTransitionController: UIViewControllerInteractiveTransitioning {
+//    public func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
+//        self.transitionContext = transitionContext
+//    }
+//    
+//    func updateInteraction(progress: CGFloat) {
+//        transitionContext?.updateInteractiveTransition(progress)
+//    }
+//    
+//    func cancleInteraction() {
+//        transitionContext?.cancelInteractiveTransition()
+//    }
+//    
+//    func finishInteraction() {
+//        if let zoomImageView = self.zoomImageView, let finalFrame = zoomImageViewFinishInteractionFrame {
+//            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+//                zoomImageView.frame = finalFrame
+//            }, completion: {
+//                finished in
+//                if finished {
+//                    zoomImageView.removeFromSuperview()
+//                }
+//            })
+//        }
+//        transitionContext?.completeTransition(true)
+//    }
+//}
 
 extension YTZTransitionController {
     func getAsceptFitFrame(image: UIImage, frame: CGRect) -> CGRect {

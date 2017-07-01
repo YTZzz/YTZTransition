@@ -9,5 +9,12 @@
 import UIKit
 
 class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransition {
-    var dragView: UIView!
+    
+    var backgroundZoomView: UIView?
+    var finalFrame: CGRect?
+    var zoomView: UIView?
+    
+    func handleFinishTransitionAnimation() {
+        
+    }
 }
