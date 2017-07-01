@@ -14,7 +14,21 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
     var finalFrame: CGRect?
     var zoomView: UIView?
     
-    func handleFinishTransitionAnimation() {
-        
+    override func finish() {
+        guard let backgroundZoomView = self.backgroundZoomView, let zoomView = self.zoomView, let finalFrame = self.finalFrame else {
+            super.finish()
+            return
+        }
+        super.finish()
+        let leftDuration = Double((1 - percentComplete) * duration)
+        UIView.animate(withDuration: leftDuration, delay: 0, options: .curveEaseInOut, animations: {
+            zoomView.frame = finalFrame
+        }, completion: {
+            finished in
+            if finished {
+                backgroundZoomView.isHidden = false
+                zoomView.isHidden = true
+            }
+        })
     }
 }
