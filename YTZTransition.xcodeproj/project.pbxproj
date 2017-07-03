@@ -14,6 +14,9 @@
 		67E684221F05328400897B31 /* YTZTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684211F05328400897B31 /* YTZTransition.swift */; };
 		67E684241F05361F00897B31 /* YTZTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684231F05361F00897B31 /* YTZTransitionController.swift */; };
 		67E684321F06B28600897B31 /* YTZPercentDrivenInteractiveController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E684311F06B28600897B31 /* YTZPercentDrivenInteractiveController.swift */; };
+		67E684371F0A086100897B31 /* image1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 67E684341F0A086100897B31 /* image1.jpg */; };
+		67E684381F0A086100897B31 /* image2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 67E684351F0A086100897B31 /* image2.jpg */; };
+		67E684391F0A086100897B31 /* image3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 67E684361F0A086100897B31 /* image3.jpg */; };
 		67FFCF421F052A330091D322 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FFCF411F052A330091D322 /* AppDelegate.swift */; };
 		67FFCF491F052A330091D322 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67FFCF481F052A330091D322 /* Assets.xcassets */; };
 		67FFCF4C1F052A330091D322 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67FFCF4A1F052A330091D322 /* LaunchScreen.storyboard */; };
@@ -38,6 +41,9 @@
 		67E684211F05328400897B31 /* YTZTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZTransition.swift; sourceTree = "<group>"; };
 		67E684231F05361F00897B31 /* YTZTransitionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZTransitionController.swift; sourceTree = "<group>"; };
 		67E684311F06B28600897B31 /* YTZPercentDrivenInteractiveController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZPercentDrivenInteractiveController.swift; sourceTree = "<group>"; };
+		67E684341F0A086100897B31 /* image1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image1.jpg; sourceTree = "<group>"; };
+		67E684351F0A086100897B31 /* image2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image2.jpg; sourceTree = "<group>"; };
+		67E684361F0A086100897B31 /* image3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image3.jpg; sourceTree = "<group>"; };
 		67FFCF3E1F052A330091D322 /* YTZTransition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YTZTransition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67FFCF411F052A330091D322 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		67FFCF481F052A330091D322 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -76,6 +82,16 @@
 			path = YTZTransition;
 			sourceTree = "<group>";
 		};
+		67E684331F0A086100897B31 /* image */ = {
+			isa = PBXGroup;
+			children = (
+				67E684341F0A086100897B31 /* image1.jpg */,
+				67E684351F0A086100897B31 /* image2.jpg */,
+				67E684361F0A086100897B31 /* image3.jpg */,
+			);
+			path = image;
+			sourceTree = "<group>";
+		};
 		67FFCF351F052A330091D322 = {
 			isa = PBXGroup;
 			children = (
@@ -103,6 +119,7 @@
 				67E684141F052AB400897B31 /* MainViewController.xib */,
 				67E684171F052AC500897B31 /* DetailViewController.swift */,
 				67E684181F052AC500897B31 /* DetailViewController.xib */,
+				67E684331F0A086100897B31 /* image */,
 				67FFCF481F052A330091D322 /* Assets.xcassets */,
 				67FFCF4A1F052A330091D322 /* LaunchScreen.storyboard */,
 				67FFCF4D1F052A330091D322 /* Info.plist */,
@@ -205,8 +222,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				67FFCF4C1F052A330091D322 /* LaunchScreen.storyboard in Resources */,
+				67E684371F0A086100897B31 /* image1.jpg in Resources */,
 				67E684161F052AB400897B31 /* MainViewController.xib in Resources */,
 				67FFCF491F052A330091D322 /* Assets.xcassets in Resources */,
+				67E684381F0A086100897B31 /* image2.jpg in Resources */,
+				67E684391F0A086100897B31 /* image3.jpg in Resources */,
 				67E6841A1F052AC500897B31 /* DetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
