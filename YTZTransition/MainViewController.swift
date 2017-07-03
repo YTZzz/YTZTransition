@@ -43,7 +43,7 @@ class MainViewController: UIViewController, YTZTransitionBackgroundDelegate {
         ytz_present(detailVC, frontDelegate: detailVC, backgroundDelegate: self)
     }
     
-    func transitionViewForBackgroundVC() -> UIView {
+    func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView {
         return selectedView
     }
 }

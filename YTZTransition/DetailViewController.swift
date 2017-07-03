@@ -45,4 +45,9 @@ class DetailViewController: UIViewController, YTZTransitionFrontDelegate {
     func transitionViewForFrontVC() -> UIView {
         return imageView
     }
+    
+    func indexPathForDismiss() -> IndexPath {
+        return IndexPath(item: 0, section: 0)
+    }
+
 }

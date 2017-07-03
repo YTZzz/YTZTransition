@@ -10,9 +10,10 @@ import UIKit
 
 protocol YTZTransitionFrontDelegate: class {
     func transitionViewForFrontVC() -> UIView
+    func indexPathForDismiss() -> IndexPath
 }
 protocol YTZTransitionBackgroundDelegate: class {
-    func transitionViewForBackgroundVC() -> UIView
+    func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView
 }
 
 class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
@@ -149,7 +150,8 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
                 return
             }
             let frontTransitionView = frontDelegate.transitionViewForFrontVC()
-            let backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC()
+            let indexPath = frontDelegate.indexPathForDismiss()
+            let backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
             
             let image = getImage(from: frontTransitionView)
             zoomImageView = UIImageView(image: image)
@@ -209,7 +211,8 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
                 return
             }
             let frontTransitionView = frontDelegate.transitionViewForFrontVC()
-            let backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC()
+            let indexPath = frontDelegate.indexPathForDismiss()
+            let backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
             
             let image = getImage(from: backgroundTransitionView)
             zoomImageView = UIImageView(image: image)
