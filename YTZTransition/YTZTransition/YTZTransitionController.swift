@@ -16,6 +16,30 @@ protocol YTZTransitionBackgroundDelegate: class {
     func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView
 }
 
+enum YTZTransitionOperation {
+    case forward
+    case backward
+}
+
+//enum YTZTransitionForwardType {
+//    case push
+//    case present
+//}
+//
+//enum YTZTransitionBackwardType {
+//    case pop
+//    case dismiss
+//}
+
+enum YTZTransitionForwardAnimationType {
+    case zoomIn
+}
+
+enum YTZTransitionBackwardAnimationType {
+    case zoomOut
+    case slide
+}
+
 class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
     
     // MARK: - Variables
@@ -35,12 +59,33 @@ class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
     fileprivate var interactionLastTouchPoint = CGPoint.zero
     fileprivate var zoomImageViewStartInteractionFrame = CGRect.zero
     
+    fileprivate var operation: YTZTransitionOperation! = .forward
+//    fileprivate var forwardType: YTZTransitionForwardType! = .push
+//    fileprivate var backwardType: YTZTransitionBackwardType = .pop
+    fileprivate var forwardAnimationType: YTZTransitionForwardAnimationType = .zoomIn
+    fileprivate var backwardAnimationType: YTZTransitionBackwardAnimationType = .zoomOut
+    
+    
     // MARK: - Init
     private override init() {
         super.init()
         dismissPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleDismissPanGestureRecognizer(_:)))
         dismissPanGestureRecognizer.delegate = self
         interactiveController = YTZPercentDrivenInteractiveController()
+    }
+    
+    convenience init(animation: YTZTransitionForwardAnimationType) {
+        self.init()
+        operation = .forward
+//        self.forwardType = forwardType
+        forwardAnimationType = animation
+    }
+    
+    convenience init(animation: YTZTransitionBackwardAnimationType) {
+        self.init()
+        operation = .backward
+//        self.backwardType = backwardType
+        backwardAnimationType = animation
     }
     
     // MARK: - Gesture
@@ -110,7 +155,7 @@ class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
     }
 }
 
-extension YTZTransitionController: UIViewControllerTransitioningDelegate {
+extension YTZTransitionController: UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
     
     // MARK: - UIViewControllerTransitioningDelegate
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -124,11 +169,21 @@ extension YTZTransitionController: UIViewControllerTransitioningDelegate {
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return isInteraction ? interactiveController : nil
     }
+    
+    // MARK: - UINavigationControllerDelegate
+    public func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return nil
+    }
+    
+    public func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return self
+    }
+
 }
 
+// MARK: - UIViewControllerAnimatedTransitioning
 extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
     
-    // MARK: - UIViewControllerAnimatedTransitioning
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return isDismissal ? 0.2 : 0.4
     }
@@ -153,12 +208,12 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
             let indexPath = frontDelegate.indexPathForDismiss()
             let backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
             
-            let image = getImage(from: frontTransitionView)
+            let image = YTZTransitionController.getImage(from: frontTransitionView)
             zoomImageView = UIImageView(image: image)
             guard let zoomImageView = self.zoomImageView else {
                 return
             }
-            zoomImageView.frame = getAsceptFitFrame(image: image, frame: fromVC.view.convert(frontTransitionView.frame, to: fromVC.view))
+            zoomImageView.frame = YTZTransitionController.getAsceptFitFrame(image: image, frame: fromVC.view.convert(frontTransitionView.frame, to: fromVC.view))
             zoomImageViewStartInteractionFrame = zoomImageView.frame
             zoomImageView.contentMode = .scaleAspectFill
             zoomImageView.clipsToBounds = true
@@ -214,12 +269,12 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
             let indexPath = frontDelegate.indexPathForDismiss()
             let backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
             
-            let image = getImage(from: backgroundTransitionView)
+            let image = YTZTransitionController.getImage(from: backgroundTransitionView)
             zoomImageView = UIImageView(image: image)
             guard let zoomImageView = self.zoomImageView else {
                 return
             }
-            let zoomFinalFrame = getAsceptFitFrame(image: image, frame: toVC.view.convert(frontTransitionView.frame, to: toVC.view))
+            let zoomFinalFrame = YTZTransitionController.getAsceptFitFrame(image: image, frame: toVC.view.convert(frontTransitionView.frame, to: toVC.view))
             zoomImageView.frame = fromVC.view.convert(backgroundTransitionView.frame, to: fromVC.view)
             zoomImageView.contentMode = .scaleAspectFill
             zoomImageView.clipsToBounds = true
@@ -227,7 +282,7 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
             containerView.addSubview(zoomImageView)
 
             let maxZoomScale: CGFloat = 1.1
-            let maxZoomFrame = getProjectionFrame(smallFrame: zoomImageView.frame, largeFrame: zoomFinalFrame, radioFinalDividLarge: maxZoomScale)
+            let maxZoomFrame = YTZTransitionController.getProjectionFrame(firstFrame: zoomImageView.frame, secondFrame: zoomFinalFrame, radioThirdDividSecond: maxZoomScale)
             
             let firstDurationRatio = 14.0 / 24.0
 
@@ -259,9 +314,10 @@ extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
     }
 }
 
+// Class func
 extension YTZTransitionController {
     
-    fileprivate func getImage(from View: UIView) -> UIImage {
+    class func getImage(from View: UIView) -> UIImage {
         if View is UIImageView {
             let imageView = View as! UIImageView
             if let image = imageView.image {
@@ -277,7 +333,7 @@ extension YTZTransitionController {
         return UIImage()
     }
 
-    fileprivate func getAsceptFitFrame(image: UIImage, frame: CGRect) -> CGRect {
+    class func getAsceptFitFrame(image: UIImage, frame: CGRect) -> CGRect {
         let imageSize = image.size
         let viewSize = frame.size
         let imageWDividH = imageSize.width / imageSize.height
@@ -299,11 +355,11 @@ extension YTZTransitionController {
         return finalFrame
     }
     
-    fileprivate func getProjectionFrame(smallFrame: CGRect, largeFrame: CGRect, radioFinalDividLarge: CGFloat) -> CGRect {
-        let finalSize = CGSize(width: largeFrame.width * radioFinalDividLarge, height: largeFrame.height * radioFinalDividLarge)
-        let radio = (finalSize.width - smallFrame.width) / (largeFrame.width - smallFrame.width)
-        let finalFrame = CGRect(x: (largeFrame.minX - smallFrame.minX) * radio + smallFrame.minX,
-                                y: (largeFrame.minY - smallFrame.minY) * radio + smallFrame.minY,
+    class func getProjectionFrame(firstFrame: CGRect, secondFrame: CGRect, radioThirdDividSecond: CGFloat) -> CGRect {
+        let finalSize = CGSize(width: secondFrame.width * radioThirdDividSecond, height: secondFrame.height * radioThirdDividSecond)
+        let radio = (finalSize.width - firstFrame.width) / (secondFrame.width - firstFrame.width)
+        let finalFrame = CGRect(x: (secondFrame.minX - firstFrame.minX) * radio + firstFrame.minX,
+                                y: (secondFrame.minY - firstFrame.minY) * radio + firstFrame.minY,
                                 width: finalSize.width,
                                 height:finalSize.height)
         return finalFrame

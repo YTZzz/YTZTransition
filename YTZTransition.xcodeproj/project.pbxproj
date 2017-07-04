@@ -21,6 +21,8 @@
 		67FFCF491F052A330091D322 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67FFCF481F052A330091D322 /* Assets.xcassets */; };
 		67FFCF4C1F052A330091D322 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67FFCF4A1F052A330091D322 /* LaunchScreen.storyboard */; };
 		67FFCF571F052A330091D322 /* YTZTransitionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FFCF561F052A330091D322 /* YTZTransitionTests.swift */; };
+		E9EB32781F0B2DE80042162A /* YTZForwardAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EB32771F0B2DE80042162A /* YTZForwardAnimationController.swift */; };
+		E9EB327A1F0B2DF60042162A /* YTZBackwardAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EB32791F0B2DF60042162A /* YTZBackwardAnimationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		67FFCF521F052A330091D322 /* YTZTransitionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YTZTransitionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		67FFCF561F052A330091D322 /* YTZTransitionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YTZTransitionTests.swift; sourceTree = "<group>"; };
 		67FFCF581F052A330091D322 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E9EB32771F0B2DE80042162A /* YTZForwardAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZForwardAnimationController.swift; sourceTree = "<group>"; };
+		E9EB32791F0B2DF60042162A /* YTZBackwardAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTZBackwardAnimationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +81,8 @@
 			children = (
 				67E684211F05328400897B31 /* YTZTransition.swift */,
 				67E684231F05361F00897B31 /* YTZTransitionController.swift */,
+				E9EB32771F0B2DE80042162A /* YTZForwardAnimationController.swift */,
+				E9EB32791F0B2DF60042162A /* YTZBackwardAnimationController.swift */,
 				67E684311F06B28600897B31 /* YTZPercentDrivenInteractiveController.swift */,
 			);
 			path = YTZTransition;
@@ -247,9 +253,11 @@
 			files = (
 				67E684191F052AC500897B31 /* DetailViewController.swift in Sources */,
 				67E684221F05328400897B31 /* YTZTransition.swift in Sources */,
+				E9EB327A1F0B2DF60042162A /* YTZBackwardAnimationController.swift in Sources */,
 				67E684321F06B28600897B31 /* YTZPercentDrivenInteractiveController.swift in Sources */,
 				67FFCF421F052A330091D322 /* AppDelegate.swift in Sources */,
 				67E684151F052AB400897B31 /* MainViewController.swift in Sources */,
+				E9EB32781F0B2DE80042162A /* YTZForwardAnimationController.swift in Sources */,
 				67E684241F05361F00897B31 /* YTZTransitionController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -48,6 +48,13 @@ extension UIViewController {
         })
     }
     
+    func ytz_slideDismiss() {
+        
+    }
+    func ytz_zoomOutDismiss() {
+        
+    }
+    
     func ytz_addInteractionDismissPanGesture(in view: UIView) -> UIPanGestureRecognizer {
         let panGestureRecognizer: UIPanGestureRecognizer = YTZTransitionController.shared.dismissPanGestureRecognizer
         view.addGestureRecognizer(panGestureRecognizer)
