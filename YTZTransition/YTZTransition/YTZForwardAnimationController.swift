@@ -24,7 +24,7 @@ class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitio
     }
     
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.2
+        return 0.4
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {

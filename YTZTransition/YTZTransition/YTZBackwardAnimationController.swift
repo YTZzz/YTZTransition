@@ -26,35 +26,43 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        
         guard
             let backgroundView = transitionContext.view(forKey: .to),
             let frontView = transitionContext.view(forKey: .from)
-            else {
-                transitionContext.completeTransition(true)
-                return
+        else {
+            transitionContext.completeTransition(true)
+            return
         }
 
         let containerView = transitionContext.containerView
         containerView.insertSubview(backgroundView, belowSubview: frontView)
         let duration = transitionDuration(using: transitionContext)
         
-        if transitionContext.isInteractive {
-            
-        } else {
-            switch animationType {
-            case .slide:
-                UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
-                    frontView.alpha = 0
-                }, completion: {
-                    finished in
-                    if finished {
+        switch animationType {
+        case .slide:
+            UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
+                frontView.alpha = 0
+            }, completion: {
+                finished in
+                if finished {
+                    let cancelled = transitionContext.transitionWasCancelled
+                    if !cancelled {
                         frontView.removeFromSuperview()
                     }
-                })
-            case .zoomOut:
-                
-            }
+                }
+            })
+        case .zoomOut:
+            UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
+                frontView.alpha = 0
+            }, completion: {
+                finished in
+                if finished {
+                    let cancelled = transitionContext.transitionWasCancelled
+                    if !cancelled {
+                        frontView.removeFromSuperview()
+                    }
+                }
+            })
         }
     }
 
