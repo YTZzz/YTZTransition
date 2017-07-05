@@ -12,17 +12,9 @@ protocol YTZTransitionFrontDelegate: class {
     func transitionViewForFrontVC() -> UIView
     func indexPathForDismiss() -> IndexPath
 }
+
 protocol YTZTransitionBackgroundDelegate: class {
     func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView
-}
-
-enum YTZTransitionForwardAnimationType {
-    case zoomIn
-}
-
-enum YTZTransitionBackwardAnimationType {
-    case zoomOut
-    case slide
 }
 
 enum YTZTransitionBackwardType {
@@ -30,69 +22,71 @@ enum YTZTransitionBackwardType {
     case pop
 }
 
-class YTZTransitionController: NSObject {
+class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
     
     // MARK: - Variables
     static let shared = YTZTransitionController()
     
-    var backgroundTransitionView: UIView!
-    var frontTransitionView: UIView!
-    var forwardAnimationType: YTZTransitionForwardAnimationType = .zoomIn
-    var backwardAnimationType: YTZTransitionBackwardAnimationType = .zoomOut 
-
-    var isDismissal = false
     var interactiveController = YTZPercentDrivenInteractiveController()
+    
     
     // MARK: - Init
     private override init() {
         super.init()
     }
-}
 
-extension YTZTransitionController: UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
-    
     // MARK: - UIViewControllerTransitioningDelegate
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return  YTZForwardAnimationController(backgroundTransitionView: backgroundTransitionView, frontTransitionView: frontTransitionView)
+        return  YTZForwardAnimationController()
     }
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        if backwardAnimationType == .slide {
-            return YTZBackwardAnimationController()
-        }
-        return YTZBackwardAnimationController(backgroundTransitionView: backgroundTransitionView, frontTransitionView: frontTransitionView)
+        let animationController = YTZBackwardAnimationController()
+        animationController.frontVC = dismissed
+        animationController.backwardType = .dismiss
+        return animationController
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return interactiveController.isInteraction ? interactiveController : nil
+        if interactiveController.isInteraction {
+            if let animationController = animator as? YTZBackwardAnimationController {
+                interactiveController.backwardAnimationController = animationController
+            }
+            return interactiveController
+        }
+        return nil
     }
-    
+
     // MARK: - UINavigationControllerDelegate
     public func navigationController(_ navigationController: UINavigationController,
                                      animationControllerFor operation: UINavigationControllerOperation,
                                      from fromVC: UIViewController,
                                      to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if operation == .push {
-            return  YTZForwardAnimationController(backgroundTransitionView: backgroundTransitionView, frontTransitionView: frontTransitionView)
+            return  YTZForwardAnimationController()
         }
         if operation == .pop {
-            if backwardAnimationType == .slide {
-                return YTZBackwardAnimationController()
-            }
-            return YTZBackwardAnimationController(backgroundTransitionView: backgroundTransitionView, frontTransitionView: frontTransitionView)
+            let animationController = YTZBackwardAnimationController()
+            animationController.frontVC = fromVC
+            animationController.backwardType = .pop
+            return animationController
         }
         return nil
     }
     
     public func navigationController(_ navigationController: UINavigationController,
                                      interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return interactiveController.isInteraction ? interactiveController : nil
+        if interactiveController.isInteraction {
+            if let animationController = animationController as? YTZBackwardAnimationController {
+                interactiveController.backwardAnimationController = animationController
+            }
+            return interactiveController
+        }
+        return nil
     }
-}
 
-// Class func
-extension YTZTransitionController {
-    
+
+    // MARK: - Class func
     class func getImage(from View: UIView) -> UIImage {
         if View is UIImageView {
             let imageView = View as! UIImageView

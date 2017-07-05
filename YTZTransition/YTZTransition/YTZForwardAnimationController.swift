@@ -13,16 +13,6 @@ class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitio
     private var backgroundTransitionView: UIView!
     private var frontTransitionView: UIView!
     
-    private override init() {
-        super.init()
-    }
-    
-    convenience init(backgroundTransitionView: UIView, frontTransitionView: UIView) {
-        self.init()
-        self.backgroundTransitionView = backgroundTransitionView
-        self.frontTransitionView = frontTransitionView
-    }
-    
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.4
     }
@@ -30,12 +20,18 @@ class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitio
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         
         guard
+            let frontView = transitionContext.view(forKey: .to),
             let backgroundView = transitionContext.view(forKey: .from),
-            let frontView = transitionContext.view(forKey: .to)
+            let frontDelegate = transitionContext.viewController(forKey: .to) as? YTZTransitionFrontDelegate,
+            let backgroundDelegate = transitionContext.viewController(forKey: .from) as? YTZTransitionBackgroundDelegate
         else {
             transitionContext.completeTransition(true)
             return
         }
+        
+        let indexPath = frontDelegate.indexPathForDismiss()
+        frontTransitionView = frontDelegate.transitionViewForFrontVC()
+        backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
         
         let image = YTZTransitionController.getImage(from: backgroundTransitionView)
         let zoomView = UIImageView(image: image)
@@ -64,18 +60,16 @@ class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitio
         }, completion: {
             [weak self]
             finished in
-            if finished {
-                self?.frontTransitionView.isHidden = false
-                UIView.animate(withDuration: duration * (1 - firstDurationRatio), delay: 0, options: .curveEaseOut, animations: {
-                    zoomView.frame = zoomFinalFrame
-                }, completion: {
-                    finished in
-                    if finished {
-                        backgroundView.removeFromSuperview()
-                        transitionContext.completeTransition(true)
-                    }
-                })
-            }
+            self?.frontTransitionView.isHidden = false
+            UIView.animate(withDuration: duration * (1 - firstDurationRatio), delay: 0, options: .curveEaseOut, animations: {
+                zoomView.frame = zoomFinalFrame
+            }, completion: {
+                finished in
+                if finished {
+                    backgroundView.removeFromSuperview()
+                    transitionContext.completeTransition(true)
+                }
+            })
         })
     }
 }
