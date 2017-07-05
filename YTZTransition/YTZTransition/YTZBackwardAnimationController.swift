@@ -13,19 +13,26 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
     // MARK: - Variables
     var backgroundTransitionView: UIView!
     var frontTransitionView: UIView!
-    var zoomImageView: UIImageView!
-    var zoomStartFrame: CGRect!
-    var zoomFinalFrame: CGRect!
-    var transitionContext: UIViewControllerContextTransitioning!
-    var startTouchPoint: CGPoint = .zero
-    var lastTouchPoint: CGPoint = .zero
+    private var zoomImageView: UIImageView!
+    private var zoomStartFrame: CGRect!
+    private var zoomFinalFrame: CGRect!
+    private var transitionContext: UIViewControllerContextTransitioning!
+    private var startTouchPoint: CGPoint = .zero
+    private var lastTouchPoint: CGPoint = .zero
     var frontVC: UIViewController?
     var backwardType: YTZTransitionBackwardType = .dismiss
-
+    weak var frontDelegate: YTZTransitionFrontDelegate?
+    weak var backgroundDelegate: YTZTransitionBackgroundDelegate?
     
     // MARK: - Init
-    override init() {
+    private override init() {
         super.init()
+    }
+    
+    init(frontDelegate: YTZTransitionFrontDelegate, backgroundDelegate: YTZTransitionBackgroundDelegate) {
+        super.init()
+        self.frontDelegate = frontDelegate
+        self.backgroundDelegate = backgroundDelegate
     }
     
     // MARK: - UIViewControllerAnimatedTransitioning
@@ -38,8 +45,8 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         guard
             let frontView = transitionContext.viewController(forKey: .from)?.view,
             let backgroundView = transitionContext.viewController(forKey: .to)?.view,
-            let frontDelegate = transitionContext.viewController(forKey: .from) as? YTZTransitionFrontDelegate,
-            let backgroundDelegate = transitionContext.viewController(forKey: .to) as? YTZTransitionBackgroundDelegate
+            let frontDelegate = self.frontDelegate,
+            let backgroundDelegate = self.backgroundDelegate
         else {
             transitionContext.completeTransition(true)
             return

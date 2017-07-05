@@ -10,9 +10,12 @@ import UIKit
 
 extension UIViewController {
     
-    func ytz_Push(viewController: UIViewController) {
+    func ytz_Push(viewController: UIViewController, frontDelegate: YTZTransitionFrontDelegate, backgroundDelegate: YTZTransitionBackgroundDelegate) {
+        let transitionController = YTZTransitionController.shared
+        transitionController.frontDelegate = frontDelegate
+        transitionController.backgroundDelegate = backgroundDelegate
         let originalNavigationDelegate = navigationController?.delegate
-        navigationController?.delegate = YTZTransitionController.shared
+        navigationController?.delegate = transitionController
         navigationController?.pushViewController(viewController, animated: true)
         navigationController?.delegate = originalNavigationDelegate
     }
@@ -25,17 +28,20 @@ extension UIViewController {
         return popToVC
     }
 
-    func ytz_present(_ viewController: UIViewController) {
+    func ytz_present(_ viewController: UIViewController, frontDelegate: YTZTransitionFrontDelegate, backgroundDelegate: YTZTransitionBackgroundDelegate) {
+        let transitionController = YTZTransitionController.shared
+        transitionController.frontDelegate = frontDelegate
+        transitionController.backgroundDelegate = backgroundDelegate
+        
         let originalPresentationStyle = viewController.modalPresentationStyle
         let originalTransitioningDelegate = viewController.transitioningDelegate
         
-        transitioningDelegate = YTZTransitionController.shared
-        modalPresentationStyle = .fullScreen
+        viewController.transitioningDelegate = transitionController
+        viewController.modalPresentationStyle = .fullScreen
         
         present(viewController, animated: true, completion: {
-            [weak self] in
-            self?.modalPresentationStyle = originalPresentationStyle
-            self?.transitioningDelegate = originalTransitioningDelegate
+            viewController.modalPresentationStyle = originalPresentationStyle
+            viewController.transitioningDelegate = originalTransitioningDelegate
         })
     }
     

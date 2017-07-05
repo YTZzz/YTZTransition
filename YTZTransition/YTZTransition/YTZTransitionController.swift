@@ -29,6 +29,8 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
     
     var interactiveController = YTZPercentDrivenInteractiveController()
     
+    weak var frontDelegate: YTZTransitionFrontDelegate?
+    weak var backgroundDelegate: YTZTransitionBackgroundDelegate?
     
     // MARK: - Init
     private override init() {
@@ -37,12 +39,11 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
 
     // MARK: - UIViewControllerTransitioningDelegate
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let animationController = YTZForwardAnimationController()
-        return animationController
+        return YTZForwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
     }
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let animationController = YTZBackwardAnimationController()
+        let animationController = YTZBackwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
         animationController.frontVC = dismissed
         animationController.backwardType = .dismiss
         return animationController
@@ -64,10 +65,10 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
                                      from fromVC: UIViewController,
                                      to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if operation == .push {
-            return  YTZForwardAnimationController()
+            return  YTZForwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
         }
         if operation == .pop {
-            let animationController = YTZBackwardAnimationController()
+            let animationController = YTZBackwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
             animationController.frontVC = fromVC
             animationController.backwardType = .pop
             return animationController

@@ -10,6 +10,19 @@ import UIKit
 
 class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitioning {
     
+    weak var frontDelegate: YTZTransitionFrontDelegate?
+    weak var backgroundDelegate: YTZTransitionBackgroundDelegate?
+
+    private override init() {
+        super.init()
+    }
+    
+    init(frontDelegate: YTZTransitionFrontDelegate, backgroundDelegate: YTZTransitionBackgroundDelegate) {
+        super.init()
+        self.frontDelegate = frontDelegate
+        self.backgroundDelegate = backgroundDelegate
+    }
+    
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.4
     }
@@ -18,8 +31,8 @@ class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitio
         guard
             let frontView = transitionContext.viewController(forKey: .to)?.view,
             let backgroundView = transitionContext.viewController(forKey: .from)?.view,
-            let frontDelegate = transitionContext.viewController(forKey: .to) as? YTZTransitionFrontDelegate,
-            let backgroundDelegate = transitionContext.viewController(forKey: .from) as? YTZTransitionBackgroundDelegate
+            let frontDelegate = self.frontDelegate,
+            let backgroundDelegate = self.backgroundDelegate
         else {
             transitionContext.completeTransition(true)
             return

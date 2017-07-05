@@ -30,7 +30,7 @@
                 <constraint firstAttribute="bottom" secondItem="LAc-YM-PXu" secondAttribute="bottom" id="f7Z-YP-ung"/>
             </constraints>
             <connections>
-                <outlet property="imageView" destination="LAc-YM-PXu" id="Kyb-oM-UQ0"/>
+                <outlet property="photoImageView" destination="LAc-YM-PXu" id="OvR-lg-nbu"/>
             </connections>
         </collectionViewCell>
     </objects>

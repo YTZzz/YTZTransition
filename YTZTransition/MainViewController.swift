@@ -13,6 +13,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     @IBOutlet weak var segControl: UISegmentedControl!
     @IBOutlet weak var mainCollectionView: UICollectionView!
     let cellId = "MainCollectionViewCell"
+    var selctedImageView: UIImageView!
     
     init() {
         super.init(nibName: "MainViewController", bundle: nil)
@@ -44,7 +45,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
-        cell.imageView.image = getImage(at: indexPath.item)
+        cell.photoImageView.image = getImage(at: indexPath.item)
         return cell
     }
 
@@ -52,20 +53,22 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let detailVC = DetailViewController()
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
-        detailVC.image = cell.imageView.image
+        detailVC.image = cell.photoImageView.image
         detailVC.indexPath = indexPath
+        selctedImageView = cell.photoImageView
         if segControl.selectedSegmentIndex == 0 {
-            ytz_Push(viewController: detailVC)
+            ytz_Push(viewController: detailVC, frontDelegate: detailVC, backgroundDelegate: self)
         } else {
-            ytz_present(detailVC)
+            ytz_present(detailVC, frontDelegate: detailVC, backgroundDelegate: self)
         }
     }
 
     // MARK: - YTZTransitionBackgroundDelegate
     func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView {
-        mainCollectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-        let cell = mainCollectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        return cell
+//        mainCollectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+//        let cell = mainCollectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
+//        return cell.imageView
+        return selctedImageView
     }
 
 }
