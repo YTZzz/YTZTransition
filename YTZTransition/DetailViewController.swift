@@ -27,8 +27,7 @@ class DetailViewController: UIViewController, YTZTransitionFrontDelegate {
         imageView.image = image
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
         imageView.addGestureRecognizer(tapGesture)
-        let panGesture = ytz_addZoomOutPanGestureRecognizer(in: imageView)
-//        panGesture.require(toFail: tapGesture)
+        _ = ytz_addZoomOutPanGestureRecognizer(in: imageView)
     }
 
     override func didReceiveMemoryWarning() {

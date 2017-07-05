@@ -13,10 +13,10 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
     // MARK: - Variables
     var backgroundTransitionView: UIView!
     var frontTransitionView: UIView!
+    private var transitionContext: UIViewControllerContextTransitioning!
     private var zoomImageView: UIImageView!
     private var zoomStartFrame: CGRect!
     private var zoomFinalFrame: CGRect!
-    private var transitionContext: UIViewControllerContextTransitioning!
     private var startTouchPoint: CGPoint = .zero
     private var lastTouchPoint: CGPoint = .zero
     weak var frontDelegate: YTZTransitionFrontDelegate?
@@ -53,6 +53,7 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         let indexPath = frontDelegate.indexPathForDismiss()
         frontTransitionView = frontDelegate.transitionViewForFrontVC()
         backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
+        
         let image = YTZTransitionController.getImage(from: backgroundTransitionView)
         zoomImageView = UIImageView(image: image)
         zoomImageView.contentMode = .scaleAspectFill
@@ -64,7 +65,7 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         let duration = transitionDuration(using: transitionContext)
         
         zoomStartFrame = YTZTransitionController.getAsceptFitFrame(image: zoomImageView.image!, frame: frontView.convert(frontTransitionView.frame, to: frontView))
-        zoomFinalFrame = backgroundView.convert(backgroundTransitionView.frame, to: backgroundView)
+        zoomFinalFrame = backgroundTransitionView.superview?.convert(backgroundTransitionView.frame, to: backgroundView)
         zoomImageView.frame = zoomStartFrame
         containerView.addSubview(zoomImageView)
         frontTransitionView.isHidden = true
@@ -72,7 +73,7 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         
         if transitionContext.isInteractive {
             // 交互
-            UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: {
                 frontView.alpha = 0
             }, completion: {
                 finished in
@@ -84,16 +85,22 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             
         } else {
             // 非交互
+            guard
+                let zoomImageView = self.zoomImageView,
+                let zoomFinalFrame = self.zoomFinalFrame,
+                let backgroundTransitionView = self.backgroundTransitionView
+            else {
+                transitionContext.completeTransition(false)
+                return
+            }
             UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
-                [weak self] in
                 frontView.alpha = 0
-                self?.zoomImageView.frame = (self?.zoomFinalFrame)!
+                zoomImageView.frame = zoomFinalFrame
             }, completion: {
-                [weak self]
                 finished in
                 if finished {
-                    self?.backgroundTransitionView.isHidden = false
-                    self?.zoomImageView.removeFromSuperview()
+                    backgroundTransitionView.isHidden = false
+                    zoomImageView.removeFromSuperview()
                     frontView.removeFromSuperview()
                     transitionContext.completeTransition(true)
                 }
@@ -106,7 +113,7 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         self.startTouchPoint = touchPoint
         self.lastTouchPoint = touchPoint
     }
-    func updateInteractiveTransition(touchPoint: CGPoint){
+    func updateInteractiveTransition(touchPoint: CGPoint) -> CGFloat {
         let progress = getZoomOutProgress(by: touchPoint)
         let sizeRadio = (1 - progress / 4)
         let width  = zoomStartFrame.width  * sizeRadio
@@ -118,14 +125,16 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
                                      width: width,
                                      height: height)
         self.lastTouchPoint = touchPoint
+        return progress
     }
-    func endInteractiveTransition(touchPoint: CGPoint, velocity: CGPoint) {
+    func endInteractiveTransition(touchPoint: CGPoint, velocity: CGPoint) -> Bool {
         let progress = getZoomOutProgress(by: touchPoint)
         if progress > 0.15 && velocity.y > -5 {
             finishInteractiveTransition()
-        } else {
-            cancelInteractiveTransition()
+            return true
         }
+        cancelInteractiveTransition()
+        return false
     }
     private func finishInteractiveTransition() {
         guard
@@ -134,10 +143,11 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             let zoomFinalFrame = zoomFinalFrame,
             let transitionContext = transitionContext
         else {
+            self.transitionContext.finishInteractiveTransition()
+            self.transitionContext.completeTransition(true)
             return
         }
-        transitionContext.finishInteractiveTransition()
-        UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseInOut, animations: {
             zoomImageView.frame = zoomFinalFrame
         }, completion: { finished in
             backgroundTransitionView.isHidden = false
@@ -154,10 +164,11 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             let zoomStartFrame = zoomStartFrame,
             let backgtoundView = transitionContext.view(forKey: .to)
         else {
+            self.transitionContext.cancelInteractiveTransition()
+            self.transitionContext.completeTransition(false)
             return
         }
-        transitionContext.cancelInteractiveTransition()
-        UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseInOut, animations: {
             zoomImageView.frame = zoomStartFrame
         }, completion: { finished in
             frontTransitionView.isHidden = false

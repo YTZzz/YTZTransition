@@ -14,7 +14,7 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
     
     var panGestureRecognizer: UIPanGestureRecognizer!
     var isInteraction = false
-    var frontVC: UIViewController?
+    weak var frontVC: UIViewController?
     var backwardType: YTZTransitionBackwardType = .dismiss
 
     override init() {
@@ -51,13 +51,20 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
             }
             backwardAnimationController.startInteractiveTransition(touchPoint: touchPoint)
         case .changed:
-            backwardAnimationController.updateInteractiveTransition(touchPoint: touchPoint)
+            let progress = backwardAnimationController.updateInteractiveTransition(touchPoint: touchPoint)
+            update(progress)
         case .ended:
             let velocity = panGestureRecognizer.velocity(in: panGestureRecognizer.view)
-            backwardAnimationController.endInteractiveTransition(touchPoint: touchPoint, velocity: velocity)
+            let finished = backwardAnimationController.endInteractiveTransition(touchPoint: touchPoint, velocity: velocity)
+            if finished {
+                finish()
+            } else {
+                cancel()
+            }
             isInteraction = false
         case .cancelled:
             backwardAnimationController.cancelInteractiveTransition()
+            cancel()
             isInteraction = false
         default:
             break

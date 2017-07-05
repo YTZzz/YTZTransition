@@ -13,7 +13,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     @IBOutlet weak var segControl: UISegmentedControl!
     @IBOutlet weak var mainCollectionView: UICollectionView!
     let cellId = "MainCollectionViewCell"
-    var selectedImageView: UIImageView!
+    var selectedView: UIView!
     var imageDict = [IndexPath: UIImage]()
     
     init() {
@@ -57,13 +57,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let detailVC = DetailViewController()
         detailVC.indexPath = indexPath
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
-        
-        selectedImageView = UIImageView(image: getImage(at: indexPath))
-        selectedImageView.frame = view.convert(cell.frame, to: view)
-        selectedImageView.contentMode = .scaleAspectFill
-        selectedImageView.clipsToBounds = true
-        
+        detailVC.image = getImage(at: indexPath)
         if segControl.selectedSegmentIndex == 0 {
             ytz_Push(viewController: detailVC, frontDelegate: detailVC, backgroundDelegate: self)
         } else {
@@ -73,8 +67,8 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
 
     // MARK: - YTZTransitionBackgroundDelegate
     func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView {
-        print(selectedImageView.description)
-        return selectedImageView
+        let cell = collectionView(mainCollectionView, cellForItemAt: indexPath) as! MainCollectionViewCell
+        return cell.photoImageView
     }
 
 }

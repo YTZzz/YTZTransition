@@ -47,13 +47,14 @@ class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitio
         zoomView.contentMode = .scaleAspectFill
         zoomView.clipsToBounds = true
 
-        let zoomStartFrame = backgroundView.convert(backgroundTransitionView.frame, to: backgroundView)
+        let containerView = transitionContext.containerView
+
+        let zoomStartFrame = (backgroundTransitionView.superview?.convert(backgroundTransitionView.frame, to: backgroundView))!
         let zoomFinalFrame = YTZTransitionController.getAsceptFitFrame(image: image, frame: frontView.convert(frontTransitionView.frame, to: frontView))
         let maxZoomScale: CGFloat = 1.1
         let zoomMaxFrame = YTZTransitionController.getProjectionFrame(firstFrame: zoomStartFrame, secondFrame: zoomFinalFrame, radioThirdDividSecond: maxZoomScale)
         zoomView.frame = zoomStartFrame
         
-        let containerView = transitionContext.containerView
         frontTransitionView.isHidden = true
         frontView.alpha = 0
         containerView.addSubview(frontView)
@@ -68,12 +69,13 @@ class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitio
         }, completion: {
             finished in
             if finished {
-                frontTransitionView.isHidden = false
                 UIView.animate(withDuration: duration * (1 - firstDurationRatio), delay: 0, options: .curveEaseOut, animations: {
                     zoomView.frame = zoomFinalFrame
                 }, completion: {
                     finished in
                     if finished {
+                        frontTransitionView.isHidden = false
+                        zoomView.removeFromSuperview()
                         backgroundView.removeFromSuperview()
                         transitionContext.completeTransition(true)
                     }
