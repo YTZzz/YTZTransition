@@ -8,14 +8,14 @@
 
 import UIKit
 
-
-
 class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransition, UIGestureRecognizerDelegate {
     
     var backwardAnimationController: YTZBackwardAnimationController!
     
     var panGestureRecognizer: UIPanGestureRecognizer!
     var isInteraction = false
+    var frontVC: UIViewController?
+    var backwardType: YTZTransitionBackwardType = .dismiss
 
     override init() {
         super.init()
@@ -42,6 +42,13 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
         switch panGestureRecognizer.state {
         case .began:
             isInteraction = true
+            if let vc = frontVC {
+                if backwardType == .pop {
+                    _ = vc.ytz_pop()
+                } else if backwardType == .dismiss {
+                    vc.ytz_dismiss()
+                }
+            }
             backwardAnimationController.startInteractiveTransition(touchPoint: touchPoint)
         case .changed:
             backwardAnimationController.updateInteractiveTransition(touchPoint: touchPoint)

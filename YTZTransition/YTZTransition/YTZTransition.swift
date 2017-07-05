@@ -14,6 +14,9 @@ extension UIViewController {
         let transitionController = YTZTransitionController.shared
         transitionController.frontDelegate = frontDelegate
         transitionController.backgroundDelegate = backgroundDelegate
+        transitionController.interactiveController.backwardType = .pop
+        transitionController.interactiveController.frontVC = self
+
         let originalNavigationDelegate = navigationController?.delegate
         navigationController?.delegate = transitionController
         navigationController?.pushViewController(viewController, animated: true)
@@ -32,7 +35,9 @@ extension UIViewController {
         let transitionController = YTZTransitionController.shared
         transitionController.frontDelegate = frontDelegate
         transitionController.backgroundDelegate = backgroundDelegate
-        
+        transitionController.interactiveController.backwardType = .dismiss
+        transitionController.interactiveController.frontVC = self
+
         let originalPresentationStyle = viewController.modalPresentationStyle
         let originalTransitioningDelegate = viewController.transitioningDelegate
         

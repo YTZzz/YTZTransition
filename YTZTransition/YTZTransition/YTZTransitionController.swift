@@ -44,16 +44,12 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = YTZBackwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
-        animationController.frontVC = dismissed
-        animationController.backwardType = .dismiss
+        interactiveController.backwardAnimationController = animationController
         return animationController
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         if interactiveController.isInteraction {
-            if let animationController = animator as? YTZBackwardAnimationController {
-                interactiveController.backwardAnimationController = animationController
-            }
             return interactiveController
         }
         return nil
@@ -69,8 +65,7 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
         }
         if operation == .pop {
             let animationController = YTZBackwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
-            animationController.frontVC = fromVC
-            animationController.backwardType = .pop
+            interactiveController.backwardAnimationController = animationController
             return animationController
         }
         return nil
@@ -89,15 +84,17 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
 
 
     // MARK: - Class func
-    class func getImage(from View: UIView) -> UIImage {
-        if View is UIImageView {
-            let imageView = View as! UIImageView
+    class func getImage(from view: UIView) -> UIImage {
+        if view is UIImageView {
+            let imageView = view as! UIImageView
             if let image = imageView.image {
                 return image
             }
         }
-        UIGraphicsBeginImageContextWithOptions(View.bounds.size, false, UIScreen.main.scale)
-        View.drawHierarchy(in: View.bounds, afterScreenUpdates: false)
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
+        if let context = UIGraphicsGetCurrentContext() {
+            view.layer.render(in: context)
+        }
         if let image = UIGraphicsGetImageFromCurrentImageContext() {
             UIGraphicsEndImageContext()
             return image

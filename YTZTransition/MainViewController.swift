@@ -13,7 +13,8 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     @IBOutlet weak var segControl: UISegmentedControl!
     @IBOutlet weak var mainCollectionView: UICollectionView!
     let cellId = "MainCollectionViewCell"
-    var selctedImageView: UIImageView!
+    var selectedImageView: UIImageView!
+    var imageDict = [IndexPath: UIImage]()
     
     init() {
         super.init(nibName: "MainViewController", bundle: nil)
@@ -34,8 +35,11 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         // Dispose of any resources that can be recreated.
     }
     
-    func getImage(at index: Int) -> UIImage {
-        return UIImage(named: "image\(index % 3 + 1).jpg")!
+    func getImage(at indexPath: IndexPath) -> UIImage {
+        if imageDict[indexPath] == nil {
+            imageDict[indexPath] = UIImage(named: "image\(indexPath.item % 3 + 1).jpg")!
+        }
+        return imageDict[indexPath]!
     }
     
     // MARK: - UICollectionViewDataSource
@@ -45,17 +49,21 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
-        cell.photoImageView.image = getImage(at: indexPath.item)
+        cell.photoImageView.image = getImage(at: indexPath)
         return cell
     }
 
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let detailVC = DetailViewController()
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
-        detailVC.image = cell.photoImageView.image
         detailVC.indexPath = indexPath
-        selctedImageView = cell.photoImageView
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
+        
+        selectedImageView = UIImageView(image: getImage(at: indexPath))
+        selectedImageView.frame = view.convert(cell.frame, to: view)
+        selectedImageView.contentMode = .scaleAspectFill
+        selectedImageView.clipsToBounds = true
+        
         if segControl.selectedSegmentIndex == 0 {
             ytz_Push(viewController: detailVC, frontDelegate: detailVC, backgroundDelegate: self)
         } else {
@@ -65,10 +73,8 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
 
     // MARK: - YTZTransitionBackgroundDelegate
     func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView {
-//        mainCollectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-//        let cell = mainCollectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
-//        return cell.imageView
-        return selctedImageView
+        print(selectedImageView.description)
+        return selectedImageView
     }
 
 }

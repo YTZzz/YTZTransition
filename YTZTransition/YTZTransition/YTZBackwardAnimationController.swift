@@ -19,8 +19,6 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
     private var transitionContext: UIViewControllerContextTransitioning!
     private var startTouchPoint: CGPoint = .zero
     private var lastTouchPoint: CGPoint = .zero
-    var frontVC: UIViewController?
-    var backwardType: YTZTransitionBackwardType = .dismiss
     weak var frontDelegate: YTZTransitionFrontDelegate?
     weak var backgroundDelegate: YTZTransitionBackgroundDelegate?
     
@@ -69,6 +67,8 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         zoomFinalFrame = backgroundView.convert(backgroundTransitionView.frame, to: backgroundView)
         zoomImageView.frame = zoomStartFrame
         containerView.addSubview(zoomImageView)
+        frontTransitionView.isHidden = true
+        backgroundTransitionView.isHidden = true
         
         if transitionContext.isInteractive {
             // 交互
@@ -91,12 +91,12 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             }, completion: {
                 [weak self]
                 finished in
-                let cancelled = transitionContext.transitionWasCancelled
-                self?.zoomImageView.removeFromSuperview()
-                if !cancelled {
+                if finished {
+                    self?.backgroundTransitionView.isHidden = false
+                    self?.zoomImageView.removeFromSuperview()
                     frontView.removeFromSuperview()
+                    transitionContext.completeTransition(true)
                 }
-                transitionContext.completeTransition(!cancelled)
             })
         }
     }
@@ -104,13 +104,7 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
     // Custom
     func startInteractiveTransition(touchPoint: CGPoint) {
         self.startTouchPoint = touchPoint
-        if let vc = frontVC {
-            if backwardType == .pop {
-                _ = vc.navigationController?.popViewController(animated: true)
-            } else if backwardType == .dismiss {
-                vc.ytz_dismiss()
-            }
-        }
+        self.lastTouchPoint = touchPoint
     }
     func updateInteractiveTransition(touchPoint: CGPoint){
         let progress = getZoomOutProgress(by: touchPoint)
