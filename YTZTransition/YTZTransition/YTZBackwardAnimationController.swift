@@ -13,6 +13,7 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
     var animationType: YTZTransitionBackwardAnimationType = .slide
     private var backgroundTransitionView: UIView!
     private var frontTransitionView: UIView!
+    var zoomImageView: UIImageView!
     
     override init() {
         super.init()
@@ -23,6 +24,11 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         animationType = .zoomOut
         self.backgroundTransitionView = backgroundTransitionView
         self.frontTransitionView = frontTransitionView
+        let image = YTZTransitionController.getImage(from: backgroundTransitionView)
+        zoomImageView = UIImageView(image: image)
+        zoomImageView.contentMode = .scaleAspectFill
+        zoomImageView.clipsToBounds = true
+        zoomImageView.backgroundColor = frontTransitionView.backgroundColor
     }
 
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -60,13 +66,8 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             
         case .zoomOut:
             // 缩小
-            let image = YTZTransitionController.getImage(from: backgroundTransitionView)
-            let zoomStartFrame = YTZTransitionController.getAsceptFitFrame(image: image, frame: frontView.convert(frontTransitionView.frame, to: frontView))
-            let zoomImageView = UIImageView(image: image)
+            let zoomStartFrame = YTZTransitionController.getAsceptFitFrame(image: zoomImageView.image!, frame: frontView.convert(frontTransitionView.frame, to: frontView))
             zoomImageView.frame = zoomStartFrame
-            zoomImageView.contentMode = .scaleAspectFill
-            zoomImageView.clipsToBounds = true
-            zoomImageView.backgroundColor = frontTransitionView.backgroundColor
             containerView.addSubview(zoomImageView)
 
             if transitionContext.isInteractive {
@@ -87,13 +88,15 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
                 // 非交互
                 let zoomFinalFrame = backgroundView.convert(backgroundTransitionView.frame, to: backgroundView)
                 UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
+                    [weak self] in
                     frontView.alpha = 0
-                    zoomImageView.frame = zoomFinalFrame
+                    self?.zoomImageView.frame = zoomFinalFrame
                 }, completion: {
+                    [weak self]
                     finished in
                     if finished {
                         let cancelled = transitionContext.transitionWasCancelled
-                        zoomImageView.removeFromSuperview()
+                        self?.zoomImageView.removeFromSuperview()
                         if !cancelled {
                             frontView.removeFromSuperview()
                         }

@@ -25,7 +25,12 @@ enum YTZTransitionBackwardAnimationType {
     case slide
 }
 
-class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
+enum YTZTransitionBackwardType {
+    case dismiss
+    case pop
+}
+
+class YTZTransitionController: NSObject {
     
     // MARK: - Variables
     static let shared = YTZTransitionController()
@@ -33,98 +38,14 @@ class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
     var backgroundTransitionView: UIView!
     var frontTransitionView: UIView!
     var forwardAnimationType: YTZTransitionForwardAnimationType = .zoomIn
-    var backwardAnimationType: YTZTransitionBackwardAnimationType = .zoomOut
+    var backwardAnimationType: YTZTransitionBackwardAnimationType = .zoomOut 
 
-    var frontVC: UIViewController?
     var isDismissal = false
-    var dismissZoomOutPanGestureRecognizer: UIPanGestureRecognizer!
-    var dismissSlidePanGestureRecognizer: UIPanGestureRecognizer!
-    fileprivate var zoomImageView: UIImageView?
-    
-    fileprivate var isInteraction = false
-    fileprivate var interactiveController = YTZPercentDrivenInteractiveController()
-    fileprivate var startInteractionPoint = CGPoint.zero
-    fileprivate var interactionLastTouchPoint = CGPoint.zero
-    fileprivate var zoomImageViewStartInteractionFrame = CGRect.zero
-    
-    
+    var interactiveController = YTZPercentDrivenInteractiveController()
     
     // MARK: - Init
     private override init() {
         super.init()
-        dismissZoomOutPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleDismissPanGestureRecognizer(_:)))
-        dismissZoomOutPanGestureRecognizer.delegate = self
-        dismissSlidePanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleDismissPanGestureRecognizer(_:)))
-        dismissSlidePanGestureRecognizer.delegate = self
-    }
-    
-    // MARK: - Gesture
-    func handleDismissPanGestureRecognizer(_ panGestureRecognizer: UIPanGestureRecognizer) {
-        
-        if panGestureRecognizer == dismissZoomOutPanGestureRecognizer {
-            let touchPoint = panGestureRecognizer.location(in: panGestureRecognizer.view!)
-            var progress = (touchPoint.y - startInteractionPoint.y) / UIScreen.main.bounds.height * 2
-            if progress < 0 {
-                progress = 0
-            } else if progress > 0.9 {
-                progress = 0.9
-            }
-            
-            switch panGestureRecognizer.state {
-            case .began:
-                isInteraction = true
-                startInteractionPoint = panGestureRecognizer.location(in: panGestureRecognizer.view!)
-                interactionLastTouchPoint = startInteractionPoint
-                if let vc = frontVC {
-                    vc.ytz_zoomOutDismiss()
-                }
-            case .changed:
-                let sizeRadio = (1 - progress / 4)
-                guard let zoomImageView = self.zoomImageView else {
-                    return
-                }
-                let width  = zoomImageViewStartInteractionFrame.width  * sizeRadio
-                let height = zoomImageViewStartInteractionFrame.height * sizeRadio
-                let x = zoomImageView.frame.minX + touchPoint.x - interactionLastTouchPoint.x + (zoomImageView.frame.width  - width ) / 2
-                let y = zoomImageView.frame.minY + touchPoint.y - interactionLastTouchPoint.y + (zoomImageView.frame.height - height) / 2
-                zoomImageView.frame = CGRect(x: x,
-                                             y: y,
-                                             width: width,
-                                             height: height)
-                interactiveController.update(progress)
-                interactionLastTouchPoint = touchPoint
-            case .ended:
-                if progress > 0.15 && panGestureRecognizer.velocity(in: panGestureRecognizer.view!).y > -5 {
-                    interactiveController.finish()
-                } else {
-                    interactiveController.cancel()
-                }
-                isInteraction = false
-            case .cancelled:
-                interactiveController.cancel()
-                isInteraction = false
-            case .failed:
-                interactiveController.cancel()
-                isInteraction = false
-            default:
-                break
-            }
-        } else if panGestureRecognizer == dismissSlidePanGestureRecognizer {
-            
-        }
-    }
-    
-    // MARK: - UIGestureRecognizerDelegate
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer == dismissZoomOutPanGestureRecognizer {
-            if let view = dismissZoomOutPanGestureRecognizer.view {
-                let velocity = dismissZoomOutPanGestureRecognizer.velocity(in: view)
-                if velocity.y > 0 && fabs(velocity.x / velocity.y) < 0.75 {
-                    return true
-                }
-            }
-        }
-        return false
     }
 }
 
@@ -143,7 +64,7 @@ extension YTZTransitionController: UIViewControllerTransitioningDelegate, UINavi
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return isInteraction ? interactiveController : nil
+        return interactiveController.isInteraction ? interactiveController : nil
     }
     
     // MARK: - UINavigationControllerDelegate
@@ -165,7 +86,7 @@ extension YTZTransitionController: UIViewControllerTransitioningDelegate, UINavi
     
     public func navigationController(_ navigationController: UINavigationController,
                                      interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return isInteraction ? interactiveController : nil
+        return interactiveController.isInteraction ? interactiveController : nil
     }
 }
 
