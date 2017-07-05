@@ -26,12 +26,10 @@ extension UIViewController {
     }
 
     func ytz_present(_ viewController: UIViewController) {
-        let transitionController = YTZTransitionController.shared
+        let originalPresentationStyle = viewController.modalPresentationStyle
+        let originalTransitioningDelegate = viewController.transitioningDelegate
         
-        let originalPresentationStyle = modalPresentationStyle
-        let originalTransitioningDelegate = transitioningDelegate
-        
-        transitioningDelegate = transitionController
+        transitioningDelegate = YTZTransitionController.shared
         modalPresentationStyle = .fullScreen
         
         present(viewController, animated: true, completion: {

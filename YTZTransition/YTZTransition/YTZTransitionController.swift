@@ -37,7 +37,8 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
 
     // MARK: - UIViewControllerTransitioningDelegate
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return  YTZForwardAnimationController()
+        let animationController = YTZForwardAnimationController()
+        return animationController
     }
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {

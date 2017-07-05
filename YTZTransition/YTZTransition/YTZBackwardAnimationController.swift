@@ -28,12 +28,6 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         super.init()
     }
     
-    init(backgroundTransitionView: UIView, frontTransitionView: UIView) {
-        super.init()
-        self.backgroundTransitionView = backgroundTransitionView
-        self.frontTransitionView = frontTransitionView
-    }
-
     // MARK: - UIViewControllerAnimatedTransitioning
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.2
@@ -42,8 +36,8 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         self.transitionContext = transitionContext
         guard
-            let frontView = transitionContext.view(forKey: .from),
-            let backgroundView = transitionContext.view(forKey: .to),
+            let frontView = transitionContext.viewController(forKey: .from)?.view,
+            let backgroundView = transitionContext.viewController(forKey: .to)?.view,
             let frontDelegate = transitionContext.viewController(forKey: .from) as? YTZTransitionFrontDelegate,
             let backgroundDelegate = transitionContext.viewController(forKey: .to) as? YTZTransitionBackgroundDelegate
         else {

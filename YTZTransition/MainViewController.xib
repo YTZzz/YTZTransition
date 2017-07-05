@@ -6,14 +6,13 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainViewController" customModule="YTZTransition" customModuleProvider="target">
             <connections>
-                <outlet property="imageView" destination="tr5-fR-gZu" id="4g2-sO-IME"/>
-                <outlet property="secondImageView" destination="Qbk-t3-XuP" id="Ztu-wv-Py1"/>
+                <outlet property="mainCollectionView" destination="A94-d3-lQw" id="Uap-nt-kc4"/>
+                <outlet property="segControl" destination="vnf-If-9pU" id="s9S-Hd-Nb7"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -22,51 +21,40 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="tr5-fR-gZu">
-                    <rect key="frame" x="0.0" y="292" width="83" height="83"/>
-                    <gestureRecognizers/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="83" id="EhW-CT-Jfz"/>
-                        <constraint firstAttribute="width" secondItem="tr5-fR-gZu" secondAttribute="height" id="mh1-B7-hx8"/>
-                    </constraints>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="A94-d3-lQw">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="615"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="dJ4-in-5Tb">
+                        <size key="itemSize" width="80" height="80"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
                     <connections>
-                        <outletCollection property="gestureRecognizers" destination="dDM-hf-gkO" appends="YES" id="bur-PO-Jtj"/>
+                        <outlet property="dataSource" destination="-1" id="vQm-s2-tz5"/>
+                        <outlet property="delegate" destination="-1" id="Y2A-bN-Gdo"/>
                     </connections>
-                </imageView>
-                <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image2.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="Qbk-t3-XuP">
-                    <rect key="frame" x="292" y="50" width="83" height="83"/>
-                    <gestureRecognizers/>
+                </collectionView>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="vnf-If-9pU">
+                    <rect key="frame" x="65" y="623" width="245" height="37"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="83" id="GfN-Yi-9jz"/>
-                        <constraint firstAttribute="width" secondItem="Qbk-t3-XuP" secondAttribute="height" id="tUR-RV-uPp"/>
+                        <constraint firstAttribute="height" constant="36" id="CcI-TD-JI5"/>
                     </constraints>
-                    <connections>
-                        <outletCollection property="gestureRecognizers" destination="WP7-23-jAK" appends="YES" id="Nlu-v6-DPh"/>
-                    </connections>
-                </imageView>
+                    <segments>
+                        <segment title="push &amp; pop"/>
+                        <segment title="present &amp; dismiss"/>
+                    </segments>
+                </segmentedControl>
             </subviews>
-            <color key="backgroundColor" red="0.93333333330000001" green="0.29803921570000003" blue="0.30980392159999998" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="Qbk-t3-XuP" secondAttribute="trailing" id="GgB-3I-bdL"/>
-                <constraint firstItem="tr5-fR-gZu" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="cP0-bA-jZF"/>
-                <constraint firstItem="tr5-fR-gZu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="nMs-0c-Uwr"/>
-                <constraint firstItem="Qbk-t3-XuP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="50" id="npq-B6-k39"/>
+                <constraint firstAttribute="trailing" secondItem="A94-d3-lQw" secondAttribute="trailing" id="0aU-pi-s1v"/>
+                <constraint firstAttribute="bottom" secondItem="vnf-If-9pU" secondAttribute="bottom" constant="8" id="3gz-sW-HAW"/>
+                <constraint firstItem="vnf-If-9pU" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="6nb-vu-vua"/>
+                <constraint firstItem="A94-d3-lQw" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="AAe-rO-pdQ"/>
+                <constraint firstItem="A94-d3-lQw" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="LFX-PF-umy"/>
+                <constraint firstItem="vnf-If-9pU" firstAttribute="top" secondItem="A94-d3-lQw" secondAttribute="bottom" constant="8" id="mqt-KK-qMX"/>
             </constraints>
-            <point key="canvasLocation" x="35.5" y="54.5"/>
         </view>
-        <tapGestureRecognizer id="dDM-hf-gkO">
-            <connections>
-                <action selector="tapImageView:" destination="-1" id="odw-se-QdT"/>
-            </connections>
-        </tapGestureRecognizer>
-        <tapGestureRecognizer id="WP7-23-jAK">
-            <connections>
-                <action selector="tapSecondImageView:" destination="-1" id="93N-pe-fwC"/>
-            </connections>
-        </tapGestureRecognizer>
     </objects>
-    <resources>
-        <image name="image.jpg" width="750" height="344"/>
-        <image name="image2.jpg" width="298" height="1334"/>
-    </resources>
 </document>

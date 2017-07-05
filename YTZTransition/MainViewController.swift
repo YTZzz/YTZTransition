@@ -2,18 +2,17 @@
 //  MainViewController.swift
 //  YTZTransition
 //
-//  Created by Sodapig on 29/06/2017.
+//  Created by Poseidon on 7/5/17.
 //  Copyright © 2017 Taozhu Ye. All rights reserved.
 //
 
 import UIKit
 
-class MainViewController: UIViewController, YTZTransitionBackgroundDelegate {
+class MainViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, YTZTransitionBackgroundDelegate {
 
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var secondImageView: UIImageView!
-    
-    var selectedView: UIView!
+    @IBOutlet weak var segControl: UISegmentedControl!
+    @IBOutlet weak var mainCollectionView: UICollectionView!
+    let cellId = "MainCollectionViewCell"
     
     init() {
         super.init(nibName: "MainViewController", bundle: nil)
@@ -22,28 +21,51 @@ class MainViewController: UIViewController, YTZTransitionBackgroundDelegate {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let nib = UINib(nibName: cellId, bundle: nil)
+        mainCollectionView.register(nib, forCellWithReuseIdentifier: cellId)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func tapImageView(_ sender: UITapGestureRecognizer) {
-        let detailVC = DetailViewController(image: imageView.image!)
-        selectedView = imageView
-        ytz_present(detailVC, frontDelegate: detailVC, backgroundDelegate: self)
+    func getImage(at index: Int) -> UIImage {
+        return UIImage(named: "image\(index % 3 + 1).jpg")!
     }
     
-    @IBAction func tapSecondImageView(_ sender: Any) {
-        let detailVC = DetailViewController(image: secondImageView.image!)
-        selectedView = secondImageView
-        ytz_present(detailVC, frontDelegate: detailVC, backgroundDelegate: self)
+    // MARK: - UICollectionViewDataSource
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 30
     }
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
+        cell.imageView.image = getImage(at: indexPath.item)
+        return cell
+    }
+
+    // MARK: - UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detailVC = DetailViewController()
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
+        detailVC.image = cell.imageView.image
+        detailVC.indexPath = indexPath
+        if segControl.selectedSegmentIndex == 0 {
+            ytz_Push(viewController: detailVC)
+        } else {
+            ytz_present(detailVC)
+        }
+    }
+
+    // MARK: - YTZTransitionBackgroundDelegate
     func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView {
-        return selectedView
+        mainCollectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+        let cell = mainCollectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
+        return cell
     }
+
 }

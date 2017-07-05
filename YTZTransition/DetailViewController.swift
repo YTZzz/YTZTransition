@@ -2,7 +2,7 @@
 //  DetailViewController.swift
 //  YTZTransition
 //
-//  Created by Sodapig on 29/06/2017.
+//  Created by Poseidon on 7/5/17.
 //  Copyright © 2017 Taozhu Ye. All rights reserved.
 //
 
@@ -11,18 +11,8 @@ import UIKit
 class DetailViewController: UIViewController, YTZTransitionFrontDelegate {
 
     @IBOutlet weak var imageView: UIImageView!
-    var image: UIImage?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        imageView.image = image
-        _ = ytz_addInteractionDismissPanGesture(in: view)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    var image: UIImage!
+    var indexPath: IndexPath!
     
     init() {
         super.init(nibName: "DetailViewController", bundle: nil)
@@ -31,23 +21,35 @@ class DetailViewController: UIViewController, YTZTransitionFrontDelegate {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
-    convenience init(image: UIImage) {
-        self.init()
-        self.image = image
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        imageView.image = image
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
+        imageView.addGestureRecognizer(tapGesture)
+        let panGesture = ytz_addZoomOutPanGestureRecognizer(in: imageView)
+//        panGesture.require(toFail: tapGesture)
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func touchCloseButton(_ sender: UIButton) {
-//        dismiss(animated: true, completion: nil)
-        ytz_dismiss()
+    func handleTapGesture(_ tagGesture: UITapGestureRecognizer) {
+        if navigationController == nil {
+            ytz_dismiss()
+        } else {
+            _ = ytz_pop()
+        }
     }
     
+    // MARK: - YTZTransitionFrontDelegate
     func transitionViewForFrontVC() -> UIView {
         return imageView
     }
     
     func indexPathForDismiss() -> IndexPath {
-        return IndexPath(item: 0, section: 0)
+        return indexPath
     }
-
 }
