@@ -10,17 +10,13 @@ import UIKit
 
 class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransition {
     
-    var frontZoomView: UIView?
-    var backgroundZoomView: UIView?
+    var frontTransitionView: UIView?
+    var backgroundTransitionView: UIView?
     var zoomView: UIView?
     var zoomStartFrame: CGRect?
     var zoomFinalFrame: CGRect?
     private var transitionContext: UIViewControllerContextTransitioning?
-    private var leftDuration: Double {
-        get {
-            return Double((1 - percentComplete) * duration)
-        }
-    }
+
     
     override func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
         self.transitionContext = transitionContext
@@ -30,7 +26,7 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
     override func finish() {
         super.finish()
         guard
-            let backgroundZoomView = self.backgroundZoomView,
+            let backgroundTransitionView = self.backgroundTransitionView,
             let zoomView = self.zoomView,
             let zoomFinalFrame = self.zoomFinalFrame,
             let transitionContext = self.transitionContext
@@ -42,7 +38,7 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
         }, completion: {
             finished in
             if finished {
-                backgroundZoomView.isHidden = false
+                backgroundTransitionView.isHidden = false
                 zoomView.isHidden = true
                 transitionContext.completeTransition(true)
             }
@@ -53,8 +49,8 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
         super.cancel()
         guard
             let transitionContext = self.transitionContext,
-            let frontZoomView = self.frontZoomView,
-            let backgroundZoomView = self.backgroundZoomView,
+            let frontTransitionView = self.frontTransitionView,
+            let backgroundTransitionView = self.backgroundTransitionView,
             let zoomView = self.zoomView,
             let zoomStartFrame = self.zoomStartFrame
         else {
@@ -69,9 +65,9 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
         }, completion: {
             finished in
             if finished {
-                frontZoomView.isHidden = false
+                frontTransitionView.isHidden = false
                 zoomView.removeFromSuperview()
-                backgroundZoomView.isHidden = false
+                backgroundTransitionView.isHidden = false
                 toView?.removeFromSuperview()
                 transitionContext.completeTransition(false)
             }

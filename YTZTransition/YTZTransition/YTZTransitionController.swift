@@ -16,21 +16,6 @@ protocol YTZTransitionBackgroundDelegate: class {
     func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView
 }
 
-enum YTZTransitionOperation {
-    case forward
-    case backward
-}
-
-//enum YTZTransitionForwardType {
-//    case push
-//    case present
-//}
-//
-//enum YTZTransitionBackwardType {
-//    case pop
-//    case dismiss
-//}
-
 enum YTZTransitionForwardAnimationType {
     case zoomIn
 }
@@ -45,110 +30,98 @@ class YTZTransitionController: NSObject, UIGestureRecognizerDelegate {
     // MARK: - Variables
     static let shared = YTZTransitionController()
     
-    weak var frontDelegate: YTZTransitionFrontDelegate?
-    weak var backgroundDelegate: YTZTransitionBackgroundDelegate?
+    var backgroundTransitionView: UIView!
+    var frontTransitionView: UIView!
+    var forwardAnimationType: YTZTransitionForwardAnimationType = .zoomIn
+    var backwardAnimationType: YTZTransitionBackwardAnimationType = .zoomOut
+
     var frontVC: UIViewController?
     var isDismissal = false
-    var dismissPanGestureRecognizer: UIPanGestureRecognizer!
+    var dismissZoomOutPanGestureRecognizer: UIPanGestureRecognizer!
+    var dismissSlidePanGestureRecognizer: UIPanGestureRecognizer!
     fileprivate var zoomImageView: UIImageView?
     
-    fileprivate var duration: Double = 0
     fileprivate var isInteraction = false
-    fileprivate var interactiveController: YTZPercentDrivenInteractiveController!
+    fileprivate var interactiveController = YTZPercentDrivenInteractiveController()
     fileprivate var startInteractionPoint = CGPoint.zero
     fileprivate var interactionLastTouchPoint = CGPoint.zero
     fileprivate var zoomImageViewStartInteractionFrame = CGRect.zero
     
-    fileprivate var operation: YTZTransitionOperation! = .forward
-//    fileprivate var forwardType: YTZTransitionForwardType! = .push
-//    fileprivate var backwardType: YTZTransitionBackwardType = .pop
-    fileprivate var forwardAnimationType: YTZTransitionForwardAnimationType = .zoomIn
-    fileprivate var backwardAnimationType: YTZTransitionBackwardAnimationType = .zoomOut
     
     
     // MARK: - Init
     private override init() {
         super.init()
-        dismissPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleDismissPanGestureRecognizer(_:)))
-        dismissPanGestureRecognizer.delegate = self
-        interactiveController = YTZPercentDrivenInteractiveController()
-    }
-    
-    convenience init(animation: YTZTransitionForwardAnimationType) {
-        self.init()
-        operation = .forward
-//        self.forwardType = forwardType
-        forwardAnimationType = animation
-    }
-    
-    convenience init(animation: YTZTransitionBackwardAnimationType) {
-        self.init()
-        operation = .backward
-//        self.backwardType = backwardType
-        backwardAnimationType = animation
+        dismissZoomOutPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleDismissPanGestureRecognizer(_:)))
+        dismissZoomOutPanGestureRecognizer.delegate = self
+        dismissSlidePanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleDismissPanGestureRecognizer(_:)))
+        dismissSlidePanGestureRecognizer.delegate = self
     }
     
     // MARK: - Gesture
     func handleDismissPanGestureRecognizer(_ panGestureRecognizer: UIPanGestureRecognizer) {
         
-        let touchPoint = panGestureRecognizer.location(in: panGestureRecognizer.view!)
-        var progress = (touchPoint.y - startInteractionPoint.y) / UIScreen.main.bounds.height * 2
-        if progress < 0 {
-            progress = 0
-        } else if progress > 0.9 {
-            progress = 0.9
-        }
-
-        switch panGestureRecognizer.state {
-        case .began:
-            isInteraction = true
-            startInteractionPoint = panGestureRecognizer.location(in: panGestureRecognizer.view!)
-            interactionLastTouchPoint = startInteractionPoint
-            if let vc = frontVC {
-                vc.ytz_dismiss()
+        if panGestureRecognizer == dismissZoomOutPanGestureRecognizer {
+            let touchPoint = panGestureRecognizer.location(in: panGestureRecognizer.view!)
+            var progress = (touchPoint.y - startInteractionPoint.y) / UIScreen.main.bounds.height * 2
+            if progress < 0 {
+                progress = 0
+            } else if progress > 0.9 {
+                progress = 0.9
             }
-        case .changed:
-            let sizeRadio = (1 - progress / 4)
-            guard let zoomImageView = self.zoomImageView else {
-                return
-            }
-            let width  = zoomImageViewStartInteractionFrame.width  * sizeRadio
-            let height = zoomImageViewStartInteractionFrame.height * sizeRadio
-            let x = zoomImageView.frame.minX + touchPoint.x - interactionLastTouchPoint.x + (zoomImageView.frame.width  - width ) / 2
-            let y = zoomImageView.frame.minY + touchPoint.y - interactionLastTouchPoint.y + (zoomImageView.frame.height - height) / 2
-            zoomImageView.frame = CGRect(x: x,
-                                         y: y,
-                                         width: width,
-                                         height: height)
-            interactiveController.update(progress)
-            interactionLastTouchPoint = touchPoint
-        case .ended:
-            if progress > 0.15 && panGestureRecognizer.velocity(in: panGestureRecognizer.view!).y > -5 {
-                interactiveController.finish()
-            } else {
+            
+            switch panGestureRecognizer.state {
+            case .began:
+                isInteraction = true
+                startInteractionPoint = panGestureRecognizer.location(in: panGestureRecognizer.view!)
+                interactionLastTouchPoint = startInteractionPoint
+                if let vc = frontVC {
+                    vc.ytz_zoomOutDismiss()
+                }
+            case .changed:
+                let sizeRadio = (1 - progress / 4)
+                guard let zoomImageView = self.zoomImageView else {
+                    return
+                }
+                let width  = zoomImageViewStartInteractionFrame.width  * sizeRadio
+                let height = zoomImageViewStartInteractionFrame.height * sizeRadio
+                let x = zoomImageView.frame.minX + touchPoint.x - interactionLastTouchPoint.x + (zoomImageView.frame.width  - width ) / 2
+                let y = zoomImageView.frame.minY + touchPoint.y - interactionLastTouchPoint.y + (zoomImageView.frame.height - height) / 2
+                zoomImageView.frame = CGRect(x: x,
+                                             y: y,
+                                             width: width,
+                                             height: height)
+                interactiveController.update(progress)
+                interactionLastTouchPoint = touchPoint
+            case .ended:
+                if progress > 0.15 && panGestureRecognizer.velocity(in: panGestureRecognizer.view!).y > -5 {
+                    interactiveController.finish()
+                } else {
+                    interactiveController.cancel()
+                }
+                isInteraction = false
+            case .cancelled:
                 interactiveController.cancel()
+                isInteraction = false
+            case .failed:
+                interactiveController.cancel()
+                isInteraction = false
+            default:
+                break
             }
-            isInteraction = false
-        case .cancelled:
-            interactiveController.cancel()
-            isInteraction = false
-        case .failed:
-            interactiveController.cancel()
-            isInteraction = false
-        default:
-            break
+        } else if panGestureRecognizer == dismissSlidePanGestureRecognizer {
+            
         }
     }
     
     // MARK: - UIGestureRecognizerDelegate
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer == dismissPanGestureRecognizer {
-            guard let view = dismissPanGestureRecognizer.view else {
-                return false
-            }
-            let velocity = dismissPanGestureRecognizer.velocity(in: view)
-            if velocity.y > 0 && fabs(velocity.x / velocity.y) < 0.75 {
-                return true
+        if gestureRecognizer == dismissZoomOutPanGestureRecognizer {
+            if let view = dismissZoomOutPanGestureRecognizer.view {
+                let velocity = dismissZoomOutPanGestureRecognizer.velocity(in: view)
+                if velocity.y > 0 && fabs(velocity.x / velocity.y) < 0.75 {
+                    return true
+                }
             }
         }
         return false
@@ -159,11 +132,14 @@ extension YTZTransitionController: UIViewControllerTransitioningDelegate, UINavi
     
     // MARK: - UIViewControllerTransitioningDelegate
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return self
+        return  YTZForwardAnimationController(backgroundTransitionView: backgroundTransitionView, frontTransitionView: frontTransitionView)
     }
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return self
+        if backwardAnimationType == .slide {
+            return YTZBackwardAnimationController()
+        }
+        return YTZBackwardAnimationController(backgroundTransitionView: backgroundTransitionView, frontTransitionView: frontTransitionView)
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
@@ -171,146 +147,25 @@ extension YTZTransitionController: UIViewControllerTransitioningDelegate, UINavi
     }
     
     // MARK: - UINavigationControllerDelegate
-    public func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+    public func navigationController(_ navigationController: UINavigationController,
+                                     animationControllerFor operation: UINavigationControllerOperation,
+                                     from fromVC: UIViewController,
+                                     to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        if operation == .push {
+            return  YTZForwardAnimationController(backgroundTransitionView: backgroundTransitionView, frontTransitionView: frontTransitionView)
+        }
+        if operation == .pop {
+            if backwardAnimationType == .slide {
+                return YTZBackwardAnimationController()
+            }
+            return YTZBackwardAnimationController(backgroundTransitionView: backgroundTransitionView, frontTransitionView: frontTransitionView)
+        }
         return nil
     }
     
-    public func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return self
-    }
-
-}
-
-// MARK: - UIViewControllerAnimatedTransitioning
-extension YTZTransitionController: UIViewControllerAnimatedTransitioning {
-    
-    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return isDismissal ? 0.2 : 0.4
-    }
-    
-    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        guard let fromVC = transitionContext.viewController(forKey: .from),
-              let toVC = transitionContext.viewController(forKey: .to) else {
-            transitionContext.completeTransition(true)
-            return
-        }
-
-        let containerView = transitionContext.containerView
-        duration = transitionDuration(using: transitionContext)
-
-        if isDismissal {
-            
-            guard let frontDelegate = self.frontDelegate, let backgroundDelegate = self.backgroundDelegate else {
-                transitionContext.completeTransition(true)
-                return
-            }
-            let frontTransitionView = frontDelegate.transitionViewForFrontVC()
-            let indexPath = frontDelegate.indexPathForDismiss()
-            let backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
-            
-            let image = YTZTransitionController.getImage(from: frontTransitionView)
-            zoomImageView = UIImageView(image: image)
-            guard let zoomImageView = self.zoomImageView else {
-                return
-            }
-            zoomImageView.frame = YTZTransitionController.getAsceptFitFrame(image: image, frame: fromVC.view.convert(frontTransitionView.frame, to: fromVC.view))
-            zoomImageViewStartInteractionFrame = zoomImageView.frame
-            zoomImageView.contentMode = .scaleAspectFill
-            zoomImageView.clipsToBounds = true
-            zoomImageView.backgroundColor = fromVC.view.backgroundColor
-            containerView.addSubview(zoomImageView)
-            
-            frontTransitionView.isHidden = true
-            
-            let zoomFinalFrame = toVC.view.convert(backgroundTransitionView.frame, to: toVC.view)
-            frontTransitionView.isHidden = true
-            containerView.insertSubview(toVC.view, belowSubview: fromVC.view)
-            fromVC.view.backgroundColor = .white
-
-            if isInteraction {
-                backgroundTransitionView.isHidden = true
-                interactiveController.frontZoomView = frontTransitionView
-                interactiveController.backgroundZoomView = backgroundTransitionView
-                interactiveController.zoomView = zoomImageView
-                interactiveController.zoomStartFrame = zoomImageViewStartInteractionFrame
-                interactiveController.zoomFinalFrame = zoomFinalFrame
-
-                UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: {
-                    fromVC.view.alpha = 0.1
-                }, completion: {
-                    finished in
-                    if finished {
-                        let cancelled = transitionContext.transitionWasCancelled
-                        if !cancelled {
-                            fromVC.view.removeFromSuperview()
-                        }
-                    }
-                })
-            } else {
-                UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
-                    zoomImageView.frame = zoomFinalFrame
-                    fromVC.view.alpha = 0
-                    }, completion: {
-                        finished in
-                        if finished {
-                            fromVC.view.removeFromSuperview()
-                            transitionContext.completeTransition(true)
-                        }
-                })
-            }
-
-        } else {
-            
-            guard let frontDelegate = self.frontDelegate, let backgroundDelegate = self.backgroundDelegate else {
-                transitionContext.completeTransition(true)
-                return
-            }
-            let frontTransitionView = frontDelegate.transitionViewForFrontVC()
-            let indexPath = frontDelegate.indexPathForDismiss()
-            let backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
-            
-            let image = YTZTransitionController.getImage(from: backgroundTransitionView)
-            zoomImageView = UIImageView(image: image)
-            guard let zoomImageView = self.zoomImageView else {
-                return
-            }
-            let zoomFinalFrame = YTZTransitionController.getAsceptFitFrame(image: image, frame: toVC.view.convert(frontTransitionView.frame, to: toVC.view))
-            zoomImageView.frame = fromVC.view.convert(backgroundTransitionView.frame, to: fromVC.view)
-            zoomImageView.contentMode = .scaleAspectFill
-            zoomImageView.clipsToBounds = true
-            zoomImageView.backgroundColor = backgroundTransitionView.backgroundColor
-            containerView.addSubview(zoomImageView)
-
-            let maxZoomScale: CGFloat = 1.1
-            let maxZoomFrame = YTZTransitionController.getProjectionFrame(firstFrame: zoomImageView.frame, secondFrame: zoomFinalFrame, radioThirdDividSecond: maxZoomScale)
-            
-            let firstDurationRatio = 14.0 / 24.0
-
-            frontTransitionView.isHidden = true
-            toVC.view.alpha = 0
-            containerView.insertSubview(toVC.view, belowSubview: zoomImageView)
-            
-            let duration = self.duration
-            UIView.animate(withDuration: duration * firstDurationRatio, delay: 0, options: .curveEaseOut, animations: {
-                zoomImageView.frame = maxZoomFrame
-                toVC.view.alpha = 1
-                }, completion: {
-                    finished in
-                    if finished {
-                        UIView.animate(withDuration: duration * (1 - firstDurationRatio), animations: {
-                            zoomImageView.frame = zoomFinalFrame
-                        }, completion: {
-                                finished in
-                                if finished {
-                                    frontTransitionView.isHidden = false
-                                    zoomImageView.removeFromSuperview()
-                                    fromVC.view.removeFromSuperview()
-                                    transitionContext.completeTransition(true)
-                                }
-                        })
-                    }
-            })
-        }
+    public func navigationController(_ navigationController: UINavigationController,
+                                     interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return isInteraction ? interactiveController : nil
     }
 }
 

@@ -9,35 +9,59 @@
 import UIKit
 
 extension UIViewController {
-    
-    func ytz_present(_ viewController: UIViewController, frontDelegate: YTZTransitionFrontDelegate?, backgroundDelegate: YTZTransitionBackgroundDelegate?) {
+        
+    func ytz_present(_ viewController: UIViewController) {
+        guard
+            let frontDelegate = viewController as? YTZTransitionFrontDelegate,
+            let backgroundDelegate = self as? YTZTransitionBackgroundDelegate
+            else {
+                return
+        }
         
         let transitionController = YTZTransitionController.shared
-        transitionController.isDismissal = false
-        transitionController.frontVC = viewController
-        transitionController.frontDelegate = frontDelegate
-        transitionController.backgroundDelegate = backgroundDelegate
-
-        let originalPresentationStyle = viewController.modalPresentationStyle
-        let originalTransitioningDelegate = viewController.transitioningDelegate
+        transitionController.forwardAnimationType = .zoomIn
+        let indexPath = frontDelegate.indexPathForDismiss()
+        transitionController.backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
+        transitionController.frontTransitionView = frontDelegate.transitionViewForFrontVC()
         
-        viewController.transitioningDelegate = transitionController
-        viewController.modalPresentationStyle = .fullScreen
-        
-        present(viewController, animated: true, completion: {
-            viewController.modalPresentationStyle = originalPresentationStyle
-            viewController.transitioningDelegate = originalTransitioningDelegate
-        })
-    }
-    
-    func ytz_dismiss() {
-        
-        let transitionController = YTZTransitionController.shared
-        transitionController.isDismissal = true
-
         let originalPresentationStyle = modalPresentationStyle
         let originalTransitioningDelegate = transitioningDelegate
+        
+        transitioningDelegate = transitionController
+        modalPresentationStyle = .fullScreen
+        
+        present(viewController, animated: true, completion: {
+            [weak self] in
+            self?.modalPresentationStyle = originalPresentationStyle
+            self?.transitioningDelegate = originalTransitioningDelegate
+        })
+    }
+    func ytz_slideDismiss() {
+        let transitionController = YTZTransitionController.shared
+        transitionController.backwardAnimationType = .slide
 
+        ytz_dismiss(transitionController: transitionController)
+    }
+    func ytz_zoomOutDismiss() {
+        guard
+            let frontDelegate = self as? YTZTransitionFrontDelegate,
+            let backgroundDelegate = presentingViewController as? YTZTransitionBackgroundDelegate
+        else {
+            return
+        }
+        let transitionController = YTZTransitionController.shared
+        transitionController.backwardAnimationType = .zoomOut
+        let indexPath = frontDelegate.indexPathForDismiss()
+        transitionController.backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
+        transitionController.frontTransitionView = frontDelegate.transitionViewForFrontVC()
+        
+        ytz_dismiss(transitionController: transitionController)
+    }
+    
+    private func ytz_dismiss(transitionController: YTZTransitionController) {
+        let originalPresentationStyle = modalPresentationStyle
+        let originalTransitioningDelegate = transitioningDelegate
+        
         transitioningDelegate = transitionController
         modalPresentationStyle = .fullScreen
         
@@ -48,15 +72,18 @@ extension UIViewController {
         })
     }
     
-    func ytz_slideDismiss() {
-        
-    }
-    func ytz_zoomOutDismiss() {
-        
+    func ytz_addZoomOutDismissPanGestureRecognizer(in view: UIView) -> UIPanGestureRecognizer {
+        let transitionController = YTZTransitionController.shared
+        transitionController.frontVC = self
+        let panGestureRecognizer: UIPanGestureRecognizer = transitionController.dismissZoomOutPanGestureRecognizer
+        view.addGestureRecognizer(panGestureRecognizer)
+        return panGestureRecognizer
     }
     
-    func ytz_addInteractionDismissPanGesture(in view: UIView) -> UIPanGestureRecognizer {
-        let panGestureRecognizer: UIPanGestureRecognizer = YTZTransitionController.shared.dismissPanGestureRecognizer
+    func ytz_addSlideDismissPanGestureRecognizer(in view: UIView) -> UIPanGestureRecognizer {
+        let transitionController = YTZTransitionController.shared
+        transitionController.frontVC = self
+        let panGestureRecognizer: UIPanGestureRecognizer = transitionController.dismissSlidePanGestureRecognizer
         view.addGestureRecognizer(panGestureRecognizer)
         return panGestureRecognizer
     }
