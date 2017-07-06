@@ -25,6 +25,8 @@ extension UIViewController {
     
     func ytz_pop() -> UIViewController? {
         let originalNavigationDelegate = navigationController?.delegate
+        let transitionController = YTZTransitionController.shared
+        transitionController.interactiveController.backwardType = .pop
         navigationController?.delegate = YTZTransitionController.shared
         let popToVC = navigationController?.popViewController(animated: true)
         navigationController?.delegate = originalNavigationDelegate
@@ -52,6 +54,7 @@ extension UIViewController {
     
     func ytz_dismiss() {
         let transitionController = YTZTransitionController.shared
+        transitionController.interactiveController.backwardType = .dismiss
         
         let originalPresentationStyle = modalPresentationStyle
         let originalTransitioningDelegate = transitioningDelegate

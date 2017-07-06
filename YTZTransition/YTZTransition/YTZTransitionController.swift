@@ -32,6 +32,9 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
     weak var frontDelegate: YTZTransitionFrontDelegate?
     weak var backgroundDelegate: YTZTransitionBackgroundDelegate?
     
+    var forwardAnimationController: YTZForwardAnimationController!
+    var backwardAnimationController: YTZBackwardAnimationController!
+    
     // MARK: - Init
     private override init() {
         super.init()
@@ -39,20 +42,20 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
 
     // MARK: - UIViewControllerTransitioningDelegate
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return YTZForwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
+        forwardAnimationController = YTZForwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
+        backwardAnimationController = YTZBackwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
+        interactiveController.backwardAnimationController = backwardAnimationController
+        return forwardAnimationController
     }
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let animationController = YTZBackwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
-        interactiveController.backwardAnimationController = animationController
-        return animationController
+        print(backwardAnimationController.description)
+        return backwardAnimationController
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        if interactiveController.isInteraction {
-            return interactiveController
-        }
-        return nil
+        print(interactiveController.description)
+        return interactiveController.isInteraction ? interactiveController : nil
     }
 
     // MARK: - UINavigationControllerDelegate
@@ -73,13 +76,7 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
     
     public func navigationController(_ navigationController: UINavigationController,
                                      interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        if interactiveController.isInteraction {
-            if let animationController = animationController as? YTZBackwardAnimationController {
-                interactiveController.backwardAnimationController = animationController
-            }
-            return interactiveController
-        }
-        return nil
+        return interactiveController.isInteraction ? interactiveController : nil
     }
 
 

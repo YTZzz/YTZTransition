@@ -19,8 +19,8 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
     private var zoomFinalFrame: CGRect!
     private var startTouchPoint: CGPoint = .zero
     private var lastTouchPoint: CGPoint = .zero
-    weak var frontDelegate: YTZTransitionFrontDelegate?
-    weak var backgroundDelegate: YTZTransitionBackgroundDelegate?
+    var frontDelegate: YTZTransitionFrontDelegate?
+    var backgroundDelegate: YTZTransitionBackgroundDelegate?
     
     // MARK: - Init
     private override init() {
@@ -88,20 +88,23 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             guard
                 let zoomImageView = self.zoomImageView,
                 let zoomFinalFrame = self.zoomFinalFrame,
+                let frontTransitionView = self.frontTransitionView,
                 let backgroundTransitionView = self.backgroundTransitionView
             else {
                 transitionContext.completeTransition(false)
                 return
             }
+            releaseDelegate()
             UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
                 frontView.alpha = 0
                 zoomImageView.frame = zoomFinalFrame
             }, completion: {
                 finished in
                 if finished {
+                    frontView.removeFromSuperview()
+                    frontTransitionView.isHidden = false
                     backgroundTransitionView.isHidden = false
                     zoomImageView.removeFromSuperview()
-                    frontView.removeFromSuperview()
                     transitionContext.completeTransition(true)
                 }
             })
@@ -147,6 +150,7 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             self.transitionContext.completeTransition(true)
             return
         }
+        releaseDelegate()
         UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseInOut, animations: {
             zoomImageView.frame = zoomFinalFrame
         }, completion: { finished in
@@ -164,8 +168,6 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             let zoomStartFrame = zoomStartFrame,
             let backgtoundView = transitionContext.view(forKey: .to)
         else {
-            self.transitionContext.cancelInteractiveTransition()
-            self.transitionContext.completeTransition(false)
             return
         }
         UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseInOut, animations: {
@@ -187,5 +189,10 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             progress = 0.9
         }
         return progress
-    }    
+    }
+    
+    func releaseDelegate() {
+        frontDelegate = nil
+        backgroundDelegate = nil
+    }
 }
