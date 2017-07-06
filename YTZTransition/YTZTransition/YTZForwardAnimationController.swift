@@ -30,7 +30,8 @@ class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitio
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard
             let frontView = transitionContext.viewController(forKey: .to)?.view,
-            let backgroundView = transitionContext.viewController(forKey: .from)?.view,
+            let backgroundVC = transitionContext.viewController(forKey: .from),
+            let backgroundView = backgroundVC.view,
             let frontDelegate = self.frontDelegate,
             let backgroundDelegate = self.backgroundDelegate
         else {
@@ -49,7 +50,8 @@ class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitio
 
         let containerView = transitionContext.containerView
 
-        let zoomStartFrame = (backgroundTransitionView.superview?.convert(backgroundTransitionView.frame, to: backgroundView))!
+        var zoomStartFrame = YTZTransitionController.getFrameInTopView(from: backgroundTransitionView)
+        zoomStartFrame.origin.y += backgroundVC.topLayoutGuide.length
         let zoomFinalFrame = YTZTransitionController.getAsceptFitFrame(image: image, frame: frontView.convert(frontTransitionView.frame, to: frontView))
         let maxZoomScale: CGFloat = 1.1
         let zoomMaxFrame = YTZTransitionController.getProjectionFrame(firstFrame: zoomStartFrame, secondFrame: zoomFinalFrame, radioThirdDividSecond: maxZoomScale)

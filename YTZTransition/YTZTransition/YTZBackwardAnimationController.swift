@@ -42,7 +42,8 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         self.transitionContext = transitionContext
         guard
             let frontView = transitionContext.viewController(forKey: .from)?.view,
-            let backgroundView = transitionContext.viewController(forKey: .to)?.view,
+            let backgroundVC = transitionContext.viewController(forKey: .to),
+            let backgroundView = backgroundVC.view,
             let frontDelegate = self.frontDelegate,
             let backgroundDelegate = self.backgroundDelegate
         else {
@@ -65,7 +66,8 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         let duration = transitionDuration(using: transitionContext)
         
         zoomStartFrame = YTZTransitionController.getAsceptFitFrame(image: zoomImageView.image!, frame: frontView.convert(frontTransitionView.frame, to: frontView))
-        zoomFinalFrame = backgroundTransitionView.superview?.convert(backgroundTransitionView.frame, to: backgroundView)
+        zoomFinalFrame = YTZTransitionController.getFrameInTopView(from: backgroundTransitionView)
+        zoomFinalFrame.origin.y += backgroundVC.topLayoutGuide.length
         zoomImageView.frame = zoomStartFrame
         containerView.addSubview(zoomImageView)
         frontTransitionView.isHidden = true

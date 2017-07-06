@@ -32,9 +32,6 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
     weak var frontDelegate: YTZTransitionFrontDelegate?
     weak var backgroundDelegate: YTZTransitionBackgroundDelegate?
     
-    var forwardAnimationController: YTZForwardAnimationController!
-    var backwardAnimationController: YTZBackwardAnimationController!
-    
     // MARK: - Init
     private override init() {
         super.init()
@@ -42,15 +39,14 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
 
     // MARK: - UIViewControllerTransitioningDelegate
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        forwardAnimationController = YTZForwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
-        backwardAnimationController = YTZBackwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
-        interactiveController.backwardAnimationController = backwardAnimationController
-        return forwardAnimationController
+        return YTZForwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
     }
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        print(backwardAnimationController.description)
-        return backwardAnimationController
+        let animationController = YTZBackwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
+        interactiveController.backwardAnimationController = animationController
+        print(animationController.description)
+        return animationController
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
@@ -97,6 +93,17 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
             return image
         }
         return UIImage()
+    }
+    
+    class func getFrameInTopView(from view: UIView) -> CGRect {
+        if let superView = view.superview {
+            let superViewFrameInTopView = getFrameInTopView(from: superView)
+            return CGRect(x: view.frame.minX + superViewFrameInTopView.minX,
+                          y: view.frame.minY + superViewFrameInTopView.minY,
+                          width: view.frame.width,
+                          height: view.frame.height)
+        }
+        return view.frame
     }
 
     class func getAsceptFitFrame(image: UIImage, frame: CGRect) -> CGRect {

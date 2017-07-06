@@ -40,15 +40,15 @@ extension UIViewController {
         transitionController.interactiveController.backwardType = .dismiss
         transitionController.interactiveController.frontVC = self
 
-        let originalPresentationStyle = viewController.modalPresentationStyle
-        let originalTransitioningDelegate = viewController.transitioningDelegate
+//        let originalPresentationStyle = viewController.modalPresentationStyle
+//        let originalTransitioningDelegate = viewController.transitioningDelegate
         
         viewController.transitioningDelegate = transitionController
         viewController.modalPresentationStyle = .fullScreen
         
         present(viewController, animated: true, completion: {
-            viewController.modalPresentationStyle = originalPresentationStyle
-            viewController.transitioningDelegate = originalTransitioningDelegate
+//            viewController.modalPresentationStyle = originalPresentationStyle
+//            viewController.transitioningDelegate = originalTransitioningDelegate
         })
     }
     
@@ -56,16 +56,16 @@ extension UIViewController {
         let transitionController = YTZTransitionController.shared
         transitionController.interactiveController.backwardType = .dismiss
         
-        let originalPresentationStyle = modalPresentationStyle
-        let originalTransitioningDelegate = transitioningDelegate
+//        let originalPresentationStyle = modalPresentationStyle
+//        let originalTransitioningDelegate = transitioningDelegate
         
         transitioningDelegate = transitionController
         modalPresentationStyle = .fullScreen
         
         dismiss(animated: true, completion: {
-            [weak self] in
-            self?.modalPresentationStyle = originalPresentationStyle
-            self?.transitioningDelegate = originalTransitioningDelegate
+//            [weak self] in
+//            self?.modalPresentationStyle = originalPresentationStyle
+//            self?.transitioningDelegate = originalTransitioningDelegate
         })
     }
     

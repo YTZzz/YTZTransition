@@ -15,6 +15,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     let cellId = "MainCollectionViewCell"
     var selectedView: UIView!
     var imageDict = [IndexPath: UIImage]()
+    var selectedCell: MainCollectionViewCell?
     
     init() {
         super.init(nibName: "MainViewController", bundle: nil)
@@ -50,6 +51,8 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
         cell.photoImageView.image = getImage(at: indexPath)
+        if indexPath.row == 0 {
+        }
         return cell
     }
 
@@ -68,6 +71,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     // MARK: - YTZTransitionBackgroundDelegate
     func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView {
         let cell = collectionView(mainCollectionView, cellForItemAt: indexPath) as! MainCollectionViewCell
+        cell.layoutIfNeeded()
         return cell.photoImageView
     }
 
