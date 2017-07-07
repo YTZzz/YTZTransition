@@ -43,26 +43,24 @@ class YTZForwardAnimationController: NSObject, UIViewControllerAnimatedTransitio
         let frontTransitionView = frontDelegate.transitionViewForFrontVC()
         let backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
         
-        let image = YTZTransitionController.getImage(from: backgroundTransitionView)
-        let zoomView = UIImageView(image: image)
-        zoomView.contentMode = .scaleAspectFill
-        zoomView.clipsToBounds = true
-
         let containerView = transitionContext.containerView
+        frontView.alpha = 0
+        frontTransitionView.isHidden = true
+        containerView.addSubview(frontView)
 
-        var zoomStartFrame = backgroundTransitionView.convert(backgroundTransitionView.bounds, to: backgroundView)
-        zoomStartFrame.origin.y += backgroundVC.topLayoutGuide.length
-        print(zoomStartFrame)
+        let image = YTZTransitionController.getImage(from: backgroundTransitionView)
+        var zoomStartFrame = backgroundTransitionView.bounds
+        zoomStartFrame.origin = YTZTransitionController.getOriginInTopView(from: backgroundTransitionView)
+//        print(zoomStartFrame)
         let zoomFinalFrame = YTZTransitionController.getAsceptFitFrame(image: image, frame: frontView.convert(frontTransitionView.frame, to: frontView))
         let maxZoomScale: CGFloat = 1.1
         let zoomMaxFrame = YTZTransitionController.getProjectionFrame(firstFrame: zoomStartFrame, secondFrame: zoomFinalFrame, radioThirdDividSecond: maxZoomScale)
+        let zoomView = UIImageView(image: image)
         zoomView.frame = zoomStartFrame
-        
-        frontTransitionView.isHidden = true
-        frontView.alpha = 0
-        containerView.addSubview(frontView)
+        zoomView.contentMode = .scaleAspectFill
+        zoomView.clipsToBounds = true
         containerView.addSubview(zoomView)
-        
+
         let duration = transitionDuration(using: transitionContext)
         let firstDurationRatio = 14.0 / 24.0
         

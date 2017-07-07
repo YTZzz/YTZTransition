@@ -11,11 +11,10 @@ import UIKit
 class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransition, UIGestureRecognizerDelegate {
     
     var backwardAnimationController: YTZBackwardAnimationController!
-    
+    var backwardType: YTZTransitionBackwardType = .dismiss
+    weak var frontVC: UIViewController?
     var panGestureRecognizer: UIPanGestureRecognizer!
     var isInteraction = false
-    weak var frontVC: UIViewController?
-    var backwardType: YTZTransitionBackwardType = .dismiss
 
     override init() {
         super.init()
@@ -51,7 +50,10 @@ class YTZPercentDrivenInteractiveController: UIPercentDrivenInteractiveTransitio
             }
             backwardAnimationController.startInteractiveTransition(touchPoint: touchPoint)
         case .changed:
-            let progress = backwardAnimationController.updateInteractiveTransition(touchPoint: touchPoint)
+            var progress = backwardAnimationController.updateInteractiveTransition(touchPoint: touchPoint)
+            if progress > 0.78 {
+                progress = 0.78
+            }
             update(progress)
         case .ended:
             let velocity = panGestureRecognizer.velocity(in: panGestureRecognizer.view)

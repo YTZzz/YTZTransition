@@ -51,8 +51,6 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MainCollectionViewCell
         cell.photoImageView.image = getImage(at: indexPath)
-        if indexPath.row == 0 {
-        }
         return cell
     }
 

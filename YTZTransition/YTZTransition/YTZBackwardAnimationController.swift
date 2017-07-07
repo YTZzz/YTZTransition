@@ -55,25 +55,25 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         frontTransitionView = frontDelegate.transitionViewForFrontVC()
         backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
         
+        let containerView = transitionContext.containerView
+        containerView.insertSubview(backgroundView, belowSubview: frontView)
+        
         let image = YTZTransitionController.getImage(from: backgroundTransitionView)
+        zoomStartFrame = YTZTransitionController.getAsceptFitFrame(image: image, frame: frontView.convert(frontTransitionView.frame, to: frontView))
+        zoomFinalFrame = backgroundTransitionView.bounds
+        zoomFinalFrame.origin = YTZTransitionController.getOriginInTopView(from: backgroundTransitionView)
+//        print(zoomFinalFrame)
         zoomImageView = UIImageView(image: image)
         zoomImageView.contentMode = .scaleAspectFill
         zoomImageView.clipsToBounds = true
         zoomImageView.backgroundColor = frontTransitionView.backgroundColor
-
-        let containerView = transitionContext.containerView
-        containerView.insertSubview(backgroundView, belowSubview: frontView)
-        let duration = transitionDuration(using: transitionContext)
-        
-        zoomStartFrame = YTZTransitionController.getAsceptFitFrame(image: zoomImageView.image!, frame: frontView.convert(frontTransitionView.frame, to: frontView))
-        zoomFinalFrame = backgroundTransitionView.convert(backgroundTransitionView.bounds, to: backgroundView)
-        zoomFinalFrame.origin.y += backgroundVC.topLayoutGuide.length
-        print(zoomFinalFrame)
         zoomImageView.frame = zoomStartFrame
         containerView.addSubview(zoomImageView)
+        
         frontTransitionView.isHidden = true
         backgroundTransitionView.isHidden = true
-        
+        let duration = transitionDuration(using: transitionContext)
+
         if transitionContext.isInteractive {
             // 交互
             UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: {
@@ -188,8 +188,8 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         var progress = (touchPoint.y - startTouchPoint.y) / UIScreen.main.bounds.height * 2
         if progress < 0 {
             progress = 0
-        } else if progress > 0.9 {
-            progress = 0.9
+        } else if progress > 1 {
+            progress = 1
         }
         return progress
     }
