@@ -45,12 +45,10 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = YTZBackwardAnimationController(frontDelegate: frontDelegate!, backgroundDelegate: backgroundDelegate!)
         interactiveController.backwardAnimationController = animationController
-        print(animationController.description)
         return animationController
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        print(interactiveController.description)
         return interactiveController.isInteraction ? interactiveController : nil
     }
 
@@ -95,17 +93,6 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
         return UIImage()
     }
     
-    class func getFrameInTopView(from view: UIView) -> CGRect {
-        if let superView = view.superview {
-            let superViewFrameInTopView = getFrameInTopView(from: superView)
-            return CGRect(x: view.frame.minX + superViewFrameInTopView.minX,
-                          y: view.frame.minY + superViewFrameInTopView.minY,
-                          width: view.frame.width,
-                          height: view.frame.height)
-        }
-        return view.frame
-    }
-
     class func getAsceptFitFrame(image: UIImage, frame: CGRect) -> CGRect {
         let imageSize = image.size
         let viewSize = frame.size

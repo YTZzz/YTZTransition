@@ -17,19 +17,13 @@ extension UIViewController {
         transitionController.interactiveController.backwardType = .pop
         transitionController.interactiveController.frontVC = self
 
-        let originalNavigationDelegate = navigationController?.delegate
         navigationController?.delegate = transitionController
         navigationController?.pushViewController(viewController, animated: true)
-        navigationController?.delegate = originalNavigationDelegate
     }
     
     func ytz_pop() -> UIViewController? {
-        let originalNavigationDelegate = navigationController?.delegate
-        let transitionController = YTZTransitionController.shared
-        transitionController.interactiveController.backwardType = .pop
         navigationController?.delegate = YTZTransitionController.shared
         let popToVC = navigationController?.popViewController(animated: true)
-        navigationController?.delegate = originalNavigationDelegate
         return popToVC
     }
 
@@ -40,33 +34,17 @@ extension UIViewController {
         transitionController.interactiveController.backwardType = .dismiss
         transitionController.interactiveController.frontVC = self
 
-//        let originalPresentationStyle = viewController.modalPresentationStyle
-//        let originalTransitioningDelegate = viewController.transitioningDelegate
-        
         viewController.transitioningDelegate = transitionController
         viewController.modalPresentationStyle = .fullScreen
         
-        present(viewController, animated: true, completion: {
-//            viewController.modalPresentationStyle = originalPresentationStyle
-//            viewController.transitioningDelegate = originalTransitioningDelegate
-        })
+        present(viewController, animated: true, completion: nil)
     }
     
     func ytz_dismiss() {
-        let transitionController = YTZTransitionController.shared
-        transitionController.interactiveController.backwardType = .dismiss
-        
-//        let originalPresentationStyle = modalPresentationStyle
-//        let originalTransitioningDelegate = transitioningDelegate
-        
-        transitioningDelegate = transitionController
+        transitioningDelegate = YTZTransitionController.shared
         modalPresentationStyle = .fullScreen
         
-        dismiss(animated: true, completion: {
-//            [weak self] in
-//            self?.modalPresentationStyle = originalPresentationStyle
-//            self?.transitioningDelegate = originalTransitioningDelegate
-        })
+        dismiss(animated: true, completion: nil)
     }
     
     func ytz_addZoomOutPanGestureRecognizer(in view: UIView) -> UIPanGestureRecognizer {
