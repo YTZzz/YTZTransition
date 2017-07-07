@@ -27,6 +27,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "All Photos"
         let nib = UINib(nibName: cellId, bundle: nil)
         mainCollectionView.register(nib, forCellWithReuseIdentifier: cellId)
     }
@@ -45,7 +46,7 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     // MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
+        return 50
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -73,4 +74,11 @@ class MainViewController: UIViewController, UICollectionViewDataSource, UICollec
         return cell.photoImageView
     }
 
+    func transitionViewFrameInWindowForBackgroundVC(at indexPath: IndexPath) -> CGRect {
+        let attributes = mainCollectionView.layoutAttributesForItem(at: indexPath)
+        if let cellFrame = attributes?.frame {
+            return mainCollectionView.convert(cellFrame, to: view)
+        }
+        return .zero
+    }
 }

@@ -13,6 +13,7 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
     // MARK: - Variables
     var backgroundTransitionView: UIView!
     var frontTransitionView: UIView!
+    private var backgroundMaskView: UIView!
     private var transitionContext: UIViewControllerContextTransitioning!
     private var zoomImageView: UIImageView!
     private var zoomStartFrame: CGRect!
@@ -51,27 +52,29 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             return
         }
         
-        let indexPath = frontDelegate.indexPathForDismiss()
+        let indexPath = frontDelegate.indexPathForDismissOrPop()
         frontTransitionView = frontDelegate.transitionViewForFrontVC()
         backgroundTransitionView = backgroundDelegate.transitionViewForBackgroundVC(at: indexPath)
         
         let containerView = transitionContext.containerView
-        containerView.insertSubview(backgroundView, belowSubview: frontView)
         
         let image = YTZTransitionController.getImage(from: backgroundTransitionView)
         zoomStartFrame = YTZTransitionController.getAsceptFitFrame(image: image, frame: frontView.convert(frontTransitionView.frame, to: frontView))
-        zoomFinalFrame = backgroundTransitionView.bounds
-        zoomFinalFrame.origin = YTZTransitionController.getOriginInTopView(from: backgroundTransitionView)
-//        print(zoomFinalFrame)
+        zoomFinalFrame = backgroundDelegate.transitionViewFrameInWindowForBackgroundVC(at: indexPath)
+        print(zoomFinalFrame)
         zoomImageView = UIImageView(image: image)
         zoomImageView.contentMode = .scaleAspectFill
         zoomImageView.clipsToBounds = true
         zoomImageView.backgroundColor = frontTransitionView.backgroundColor
         zoomImageView.frame = zoomStartFrame
+                
+        backgroundMaskView = UIView(frame: zoomFinalFrame)
+        backgroundMaskView.backgroundColor = .white
+        containerView.insertSubview(backgroundView, belowSubview: frontView)
+        containerView.insertSubview(backgroundMaskView, belowSubview: frontView)
         containerView.addSubview(zoomImageView)
-        
+
         frontTransitionView.isHidden = true
-        backgroundTransitionView.isHidden = true
         let duration = transitionDuration(using: transitionContext)
 
         if transitionContext.isInteractive {
@@ -92,7 +95,7 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
                 let zoomImageView = self.zoomImageView,
                 let zoomFinalFrame = self.zoomFinalFrame,
                 let frontTransitionView = self.frontTransitionView,
-                let backgroundTransitionView = self.backgroundTransitionView
+                let backgroundMaskView = self.backgroundMaskView
             else {
                 transitionContext.completeTransition(false)
                 return
@@ -106,7 +109,7 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
                 if finished {
                     frontView.removeFromSuperview()
                     frontTransitionView.isHidden = false
-                    backgroundTransitionView.isHidden = false
+                    backgroundMaskView.removeFromSuperview()
                     zoomImageView.removeFromSuperview()
                     transitionContext.completeTransition(true)
                 }
@@ -144,10 +147,10 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
     }
     private func finishInteractiveTransition() {
         guard
-            let backgroundTransitionView = backgroundTransitionView,
             let zoomImageView = zoomImageView,
             let zoomFinalFrame = zoomFinalFrame,
-            let transitionContext = transitionContext
+            let transitionContext = transitionContext,
+            let backgroundMaskView = self.backgroundMaskView
         else {
             self.transitionContext.finishInteractiveTransition()
             self.transitionContext.completeTransition(true)
@@ -157,8 +160,8 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseInOut, animations: {
             zoomImageView.frame = zoomFinalFrame
         }, completion: { finished in
-            backgroundTransitionView.isHidden = false
-            zoomImageView.isHidden = true
+            backgroundMaskView.removeFromSuperview()
+            zoomImageView.removeFromSuperview()
             transitionContext.completeTransition(true)
         })
     }
@@ -166,10 +169,9 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
         guard
             let transitionContext = transitionContext,
             let frontTransitionView = frontTransitionView,
-            let backgroundTransitionView = backgroundTransitionView,
             let zoomImageView = zoomImageView,
             let zoomStartFrame = zoomStartFrame,
-            let backgtoundView = transitionContext.view(forKey: .to)
+            let backgroundMaskView = self.backgroundMaskView
         else {
             return
         }
@@ -177,9 +179,8 @@ class YTZBackwardAnimationController: NSObject, UIViewControllerAnimatedTransiti
             zoomImageView.frame = zoomStartFrame
         }, completion: { finished in
             frontTransitionView.isHidden = false
+            backgroundMaskView.removeFromSuperview()
             zoomImageView.removeFromSuperview()
-            backgroundTransitionView.isHidden = false
-            backgtoundView.removeFromSuperview()
             transitionContext.completeTransition(false)
         })
     }

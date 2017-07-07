@@ -10,11 +10,12 @@ import UIKit
 
 protocol YTZTransitionFrontDelegate: class {
     func transitionViewForFrontVC() -> UIView
-    func indexPathForDismiss() -> IndexPath
+    func indexPathForDismissOrPop() -> IndexPath
 }
 
 protocol YTZTransitionBackgroundDelegate: class {
     func transitionViewForBackgroundVC(at indexPath: IndexPath) -> UIView
+    func transitionViewFrameInWindowForBackgroundVC(at indexPath: IndexPath) -> CGRect
 }
 
 enum YTZTransitionBackwardType {
@@ -92,23 +93,7 @@ class YTZTransitionController: NSObject, UIViewControllerTransitioningDelegate, 
         }
         return UIImage()
     }
-    
-    class func getOriginInTopView(from view: UIView) -> CGPoint {
-        if let superView = view.superview {
-            let superViewOriginInTopView = getOriginInTopView(from: superView)
-            var point = CGPoint(x: view.frame.minX + superViewOriginInTopView.x, y: view.frame.minY + superViewOriginInTopView.y)
-            if let scrollView = superView as? UIScrollView {
-                print("scrollView.contentInset = ", scrollView.contentInset)
-                point = CGPoint(x: point.x + scrollView.contentInset.left, y: point.y + scrollView.contentInset.top)
-                if let textView = superView as? UITextView {
-                    point = CGPoint(x: point.x + textView.textContainerInset.left, y: point.y + textView.textContainerInset.top)
-                }
-            }
-            return point
-        }
-        return view.frame.origin
-    }
-    
+        
     class func getAsceptFitFrame(image: UIImage, frame: CGRect) -> CGRect {
         let imageSize = image.size
         let viewSize = frame.size

@@ -24,6 +24,7 @@ class DetailViewController: UIViewController, YTZTransitionFrontDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Photo"
         imageView.image = image
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
         imageView.addGestureRecognizer(tapGesture)
@@ -48,7 +49,7 @@ class DetailViewController: UIViewController, YTZTransitionFrontDelegate {
         return imageView
     }
     
-    func indexPathForDismiss() -> IndexPath {
+    func indexPathForDismissOrPop() -> IndexPath {
         return indexPath
     }
 }
